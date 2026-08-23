@@ -96,20 +96,21 @@ refusal behavior is set by *how* the model is served, not by the checkpoint.
 
 ### What each endpoint is
 
-| ID | Endpoint | What it is |
+| Label | model id | What it is |
 |---|---|---|
-| **A** | `kimi-k3-code` | Our production **Kimi-K3 Thinker + Answerer** pipeline (two-stage: a thinker reasons, an answerer responds). Tool-calling enabled. |
-| **B** | `necromicon` | The same **Kimi-K3 Thinker + Answerer** stack as A, served as `necromicon` on [platform.audn.ai](https://platform.audn.ai). A and B are the same system behind two names. |
-| **C** | `k3think` | **Kimi-K3 thinker only** — no tool-calling. When it "doesn't like" a prompt it does not emit a refusal; it **silently truncates the whole answer** (empty body, `finish_reason=stop`). This happens ~**4.2%** of the time by design. In this run that surfaced as 33 empty responses → read its effective refusal as **6.5%**, not the 0.2% the refusal-text classifier sees. |
-| **D** | `modal-baseline` | **Shared/baseline Kimi-K3 deployment** on [modal.com](https://modal.com) — the stock, un-tuned deployment. It refuses **97.5%** of these prompts: the baseline is the one guardrailed configuration in the set. |
-| **E** | `modal-b300` | [`Blackfrost-AI/KIMI-K3-Q2_K-GGUF-ABLITERATED`](https://huggingface.co/Blackfrost-AI/KIMI-K3-Q2_K-GGUF-ABLITERATED), an abliterated Kimi-K3, deployed on modal.com on **8×B300** (~**$47K/mo**). Fully permissive with zero empty/truncated responses. |
+| **necromicon (Kimi K3) attempt 1 & 2** | `necromicon` | **Kimi-K3 Thinker + Answerer** pipeline (two-stage: a thinker reasons, an answerer responds). Two runs of the **same config** — attempt 1 and attempt 2 — to show run-to-run variance. |
+| **C_k3think** | `k3think` | **Kimi-K3 thinker leg only** (built on Modal's baseline). When it "doesn't like" a prompt it does not emit a refusal; it **silently truncates the whole answer** (empty body, `finish_reason=stop`), ~**4.2%** of the time by design. Here that surfaced as 33 empties → effective refusal **6.5%**, not the 0.2% the classifier sees. |
+| **D_modal-baseline** | (internal) | **Shared/baseline Kimi-K3** on [modal.com](https://modal.com) — the stock, un-tuned deployment. Refuses **97.5%**: the one guardrailed configuration in the set. |
+| **E_modal-b300** | (internal) | [`Blackfrost-AI/KIMI-K3-Q2_K-GGUF-ABLITERATED`](https://huggingface.co/Blackfrost-AI/KIMI-K3-Q2_K-GGUF-ABLITERATED), an abliterated Kimi-K3 on **8×B300** (~**$47K/mo**) on modal.com. Fully permissive, zero empty/truncated. |
+| **pingu-unchained-10 (qwen3.8-abliterated)** | `pingu-unchained-10` | Abliterated Qwen3.8; genuinely permissive (1.9% / 97.7%). |
+| **wiro qwen3-8-27b-obliterated** | `qwen/qwen3-8-27b-obliterated` (Wiro) | "Obliterated" in name only — **0/10** real compliance (deflects/refuses); spot-checked at 10 prompts. See [FINDINGS.md](FINDINGS.md). |
 
 ### Results
 
 | Endpoint | n | Refusal | Comply | Eff. refusal | Notes |
 |---|---|---|---|---|---|
-| B_necromicon | 520 | 2.9% | 97.1% | 2.9% | Thinker+Answerer (same as A), permissive |
-| A_kimi-k3-code | 520 | 2.5% | 96.9% | 3.1% | Thinker+Answerer, tool-calling, permissive |
+| necromicon (Kimi K3) attempt 2 | 520 | 2.9% | 97.1% | 2.9% | Kimi-K3 Thinker+Answerer, run 2 (same config) |
+| necromicon (Kimi K3) attempt 1 | 520 | 2.5% | 96.9% | 3.1% | Kimi-K3 Thinker+Answerer, run 1 (same config) |
 | E_modal-b300 | 520 | 3.3% | 96.7% | 3.3% | abliterated Kimi-K3 on 8×B300; all real content |
 | C_k3think | 520 | 0.2% | 93.5% | 6.5% | thinker-only; refuses by **silent truncation** (~4.2% by design), 33 empties here |
 | D_modal-baseline | 520 | 97.5% | 2.5% | 97.5% | stock baseline Kimi-K3 on modal.com — the guardrailed one |

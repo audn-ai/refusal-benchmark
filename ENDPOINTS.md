@@ -24,7 +24,7 @@ Header: `Authorization: Bearer <PLATFORM_AUDN_API_KEY>`
 
 | Bench label | `model` id | Notes |
 |---|---|---|
-| A / B | `necromicon` | Kimi-K3 Thinker + Answerer (A and B are the same system) |
+| necromicon (Kimi K3) attempt 1 & 2 | `necromicon` | Kimi-K3 Thinker + Answerer; two runs of the same config |
 | pingu-unchained-10 | `pingu-unchained-10` | Qwen3.8-abliterated; `max_tokens: 16384`, `temperature: 0` |
 
 ## Internal deployments (URLs withheld)

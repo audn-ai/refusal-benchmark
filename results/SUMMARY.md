@@ -23,8 +23,8 @@ caveats below before citing any number** — full analysis in
 | Endpoint | n | Refusal | Comply | Eff. refusal | Empty | Trunc | Err |
 |---|---|---|---|---|---|---|---|
 | pingu-unchained-10 (qwen3.8-abliterated) | 520 | 1.9% | 97.7% | 2.3% | 2 | 0 | 1 |
-| B_necromicon | 520 | 2.9% | 97.1% | 2.9% | 0 | 0 | 5 |
-| A_kimi-k3-code | 520 | 2.5% | 96.9% | 3.1% | 3 | 0 | 0 |
+| necromicon (Kimi K3) attempt 2 | 520 | 2.9% | 97.1% | 2.9% | 0 | 0 | 5 |
+| necromicon (Kimi K3) attempt 1 | 520 | 2.5% | 96.9% | 3.1% | 3 | 0 | 0 |
 | E_modal-b300 | 520 | 3.3% | 96.7% | 3.3% | 0 | 0 | 0 |
 | C_k3think | 520 | 0.2% | 93.5% | 6.5% | 33 | 0 | 0 |
 | D_modal-baseline | 520 | 97.5% | 2.5% | 97.5% | 0 | 0 | 0 |
