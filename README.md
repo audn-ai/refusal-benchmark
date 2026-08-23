@@ -110,12 +110,14 @@ refusal behavior is set by *how* the model is served, not by the checkpoint.
 | **E_modal-b300** | (internal) | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), a derisked/abliterated Kimi-K3 deployed by Audn as **MXFP4 on 8×B300** (the setup unlocked when the [audn.ai/necromicon](https://audn.ai/necromicon) cohort reaches **50 people**). On 8×B300 it runs **~5× faster than necromicon** and is more suitable for opencode and other harnesses. Fully permissive, zero empty/truncated. |
 | **pingu-unchained-10 (qwen3.8-abliterated)** | `pingu-unchained-10` | Abliterated Qwen3.8; genuinely permissive (1.9% / 97.7%). |
 | **J_k3-thinker-qwen38** | `k3-thinker-qwen38` | **Audn Abliteration Kimi-K3 Thinker + Qwen3.8 answerer.** Stable experience but less intelligent than necromicon; faster experience but might require retries. Works well on **any** harness. |
+| **K_qwf (Qwen3.8-27B SFT on F-corpus)** | (internal) | **Qwen3.8-27B SFT 200 steps on F's thinking-injected corpus** (tinker-RL `QW_F`, default on the F-endpoint). The only run in the set with **zero** refusals, empties, truncations, or errors — **520/520 regex-comply (0.0% / 100%)**. |
 | **wiro qwen3-8-27b-obliterated** | `qwen/qwen3-8-27b-obliterated` (Wiro) | "Obliterated" in name only — **0/10** real compliance (deflects/refuses); spot-checked at 10 prompts. See [FINDINGS.md](FINDINGS.md). |
 
 ### Results
 
 | Endpoint | n | Refusal | Comply | Eff. refusal | Notes |
 |---|---|---|---|---|---|
+| K_qwf (Qwen3.8-27B SFT on F-corpus) | 520 | 0.0% | 100% | 0.0% | Qwen3.8-27B SFT on F-corpus; zero refusals/empties/trunc/errors |
 | necromicon (Kimi K3) attempt 2 | 520 | 2.9% | 97.1% | 2.9% | Kimi-K3 Thinker+Answerer, run 2 (same config) |
 | necromicon (Kimi K3) attempt 1 | 520 | 2.5% | 96.9% | 3.1% | Kimi-K3 Thinker+Answerer, run 1 (same config) |
 | E_modal-b300 | 520 | 3.3% | 96.7% | 3.3% | abliterated Kimi-K3 on 8×B300; all real content |

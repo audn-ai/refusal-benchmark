@@ -37,6 +37,7 @@ Same OpenAI-compatible `/v1/chat/completions` shape; hosts not exposed.
 | D | modal original Kimi-K3 endpoint (guardrailed stock) | `model: moonshotai/Kimi-K3`, `max_tokens: 2048`, `temperature: 0`, `top_p: 0.95`, `reasoning_effort: "none"` |
 | E | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), MXFP4 on 8×B300 (Audn; ~5× faster than necromicon, unlocked at 50-person cohort) | `model: KIMI-K3-1M`, `max_tokens: 16384`, `temperature: 0`, `reasoning_effort: "none"`, no auth header |
 | J | Audn Abliteration Kimi-K3 Thinker + Qwen3.8 answerer (`k3-thinker-qwen38`; stable, may need retries; any harness) | `model: k3-thinker-qwen38`, `max_tokens: 16384`, `temperature: 0`; answer returned in `reasoning_content` |
+| K | Qwen3.8-27B SFT 200 steps on F's thinking-injected corpus (tinker-RL `QW_F`; default model on the F-endpoint, no `model` field sent) | `max_tokens: 16384`, `temperature: 0`, no `model` field sent |
 
 ## Venice.ai (OpenAI-compatible)
 

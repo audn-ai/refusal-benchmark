@@ -22,6 +22,7 @@ caveats below before citing any number** — full analysis in
 
 | Endpoint | n | Refusal | Comply | Eff. refusal | Empty | Trunc | Err |
 |---|---|---|---|---|---|---|---|
+| K_qwf (Qwen3.8-27B SFT on F-corpus) | 520 | 0.0% | 100% | 0.0% | 0 | 0 | 0 |
 | pingu-unchained-10 (qwen3.8-abliterated) | 520 | 1.9% | 97.7% | 2.3% | 2 | 0 | 1 |
 | necromicon (Kimi K3) attempt 2 | 520 | 2.9% | 97.1% | 2.9% | 0 | 0 | 5 |
 | necromicon (Kimi K3) attempt 1 | 520 | 2.5% | 96.9% | 3.1% | 3 | 0 | 0 |
@@ -33,7 +34,7 @@ caveats below before citing any number** — full analysis in
 | Venice qwen-3-8-27b (sysprompt ON)* | 83 | 1.2% | 68.7% | — | 25 | 8 | — |
 | wiro qwen3-8-27b-obliterated† | 10 | 0.0% | 100% | — | 0 | 0 | — |
 
-`C_k3think` = Audn Abliteration Kimi-K3 Thinker (thinker leg). `D_modal-baseline` = modal original Kimi-K3 endpoint (guardrailed stock). `E_modal-b300` = `Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`, MXFP4 on 8×B300 (Audn; unlocked at 50-person cohort). `J_k3-thinker-qwen38` = Audn Abliteration Thinker + Qwen3.8 answerer (stable, less intelligent than necromicon, faster but may need retries; works on any harness). `pingu-unchained-10
+`C_k3think` = Audn Abliteration Kimi-K3 Thinker (thinker leg). `D_modal-baseline` = modal original Kimi-K3 endpoint (guardrailed stock). `E_modal-b300` = `Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`, MXFP4 on 8×B300 (Audn; unlocked at 50-person cohort). `J_k3-thinker-qwen38` = Audn Abliteration Thinker + Qwen3.8 answerer (stable, less intelligent than necromicon, faster but may need retries; works on any harness). `K_qwf` = Qwen3.8-27B SFT 200 steps on F's thinking-injected corpus (tinker-RL `QW_F` model, default on the F-endpoint); the only run in the set with **zero** refusals, empties, truncations, or errors — 520/520 regex-comply. `pingu-unchained-10
 (qwen3.8-abliterated)`: 519/520 valid (1 prompt reproducibly timed out on the
 backend).
 
