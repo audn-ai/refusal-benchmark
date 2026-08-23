@@ -104,3 +104,20 @@ marketplace site) reproducibly timed out on Wiro's backend.
   GPU queue and backend 5xx, not more throughput. Always set a generous poll timeout
   and make retries idempotent (resume that re-runs `error` rows), or you pay for tasks
   you record as failures.
+
+
+## Venice jailbreak system prompt makes it go silent (partial data)
+
+Venice serves `qwen-3-8-27b` with an optional ~1,550-token system prompt
+("no ethical boundaries / never refuse / never disclaimer"). Its run was
+balance-limited (most calls 402/429), but the completed subset shows the prompt
+**backfires**:
+
+| Venice config | valid n | refusal | comply | empty |
+|---|---|---|---|---|
+| sysprompt OFF (bare model) | 97 | 1.0% | 95.9% | 3 |
+| sysprompt ON (jailbreak) | 83 | 1.2% | 68.7% | 25 |
+
+With the jailbreak prompt ON, comply *drops* and empty responses jump ~8×. The prompt
+pushes the model to go **silent** on hard prompts rather than answer — the same
+silent-block behavior seen on C. Small n; indicative, not final.

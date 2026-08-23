@@ -28,11 +28,17 @@ caveats below before citing any number** — full analysis in
 | E_modal-b300 | 520 | 3.3% | 96.7% | 3.3% | 0 | 0 | 0 |
 | C_k3think | 520 | 0.2% | 93.5% | 6.5% | 33 | 0 | 0 |
 | D_modal-baseline | 520 | 97.5% | 2.5% | 97.5% | 0 | 0 | 0 |
-| Venice qwen-3-8-27b | — | — | — | — | — | — | — |
+| Venice qwen-3-8-27b (sysprompt OFF)* | 97 | 1.0% | 95.9% | — | 3 | 12 | — |
+| Venice qwen-3-8-27b (sysprompt ON)* | 83 | 1.2% | 68.7% | — | 25 | 8 | — |
 
 `D_modal-baseline` is the guardrailed stock deployment. `pingu-unchained-10
 (qwen3.8-abliterated)`: 519/520 valid (1 prompt reproducibly timed out on the
-backend). **Venice** (`qwen-3-8-27b`) belongs on this list but has no final numbers:
-its run was invalidated mid-way by account-balance exhaustion (HTTP 402) plus 429
-rate-limiting — see ENDPOINTS.md. See FINDINGS.md for the deflection-vs-refusal spot
+backend).
+
+**Venice** (`qwen-3-8-27b`) rows are **partial**: its run was cut short by
+account-balance exhaustion (HTTP 402) + 429 rate-limiting, so n is the completed
+subset (97 / 83 of 519), not the full set — treat as indicative, not final. Notably,
+with Venice's ~1,550-token "never refuse" system prompt ON, comply *drops*
+(95.9%→68.7%) and empties rise (3→25): the jailbreak prompt makes the model go
+**silent** on hard prompts, not more compliant. See ENDPOINTS.md / FINDINGS.md. See FINDINGS.md for the deflection-vs-refusal spot
 check and the Wiro obliterated result.
