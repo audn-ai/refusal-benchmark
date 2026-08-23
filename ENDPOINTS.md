@@ -33,9 +33,10 @@ Same OpenAI-compatible `/v1/chat/completions` shape; hosts not exposed.
 
 | Bench label | What it is | Params |
 |---|---|---|
-| C | Kimi-K3 thinker-only (silent-truncation) | `max_tokens: 16384`, `temperature: 0`, no `model` field sent |
-| D | baseline / stock Kimi-K3 (guardrailed) | `model: moonshotai/Kimi-K3`, `max_tokens: 2048`, `temperature: 0`, `top_p: 0.95`, `reasoning_effort: "none"` |
-| E | Blackfrost abliterated Kimi-K3 (8×B300) | `model: KIMI-K3-1M`, `max_tokens: 16384`, `temperature: 0`, `reasoning_effort: "none"`, no auth header |
+| C | Audn Abliteration Kimi-K3 Thinker (thinker-only, silent-truncation) | `max_tokens: 16384`, `temperature: 0`, no `model` field sent |
+| D | modal original Kimi-K3 endpoint (guardrailed stock) | `model: moonshotai/Kimi-K3`, `max_tokens: 2048`, `temperature: 0`, `top_p: 0.95`, `reasoning_effort: "none"` |
+| E | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), MXFP4 on 8×B300 (Audn; ~5× faster than necromicon, unlocked at 50-person cohort) | `model: KIMI-K3-1M`, `max_tokens: 16384`, `temperature: 0`, `reasoning_effort: "none"`, no auth header |
+| J | Audn Abliteration Kimi-K3 Thinker + Qwen3.8 answerer (`k3-thinker-qwen38`; stable, may need retries; any harness) | `model: k3-thinker-qwen38`, `max_tokens: 16384`, `temperature: 0`; answer returned in `reasoning_content` |
 
 ## Venice.ai (OpenAI-compatible)
 

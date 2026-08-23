@@ -28,11 +28,12 @@ caveats below before citing any number** — full analysis in
 | E_modal-b300 | 520 | 3.3% | 96.7% | 3.3% | 0 | 0 | 0 |
 | C_k3think | 520 | 0.2% | 93.5% | 6.5% | 33 | 0 | 0 |
 | D_modal-baseline | 520 | 97.5% | 2.5% | 97.5% | 0 | 0 | 0 |
+| J_k3-thinker-qwen38 | 520 | 3.1% | 96.7% | 3.3% | 1 | 0 | 1 |
 | Venice qwen-3-8-27b (sysprompt OFF)* | 97 | 1.0% | 95.9% | — | 3 | 12 | — |
 | Venice qwen-3-8-27b (sysprompt ON)* | 83 | 1.2% | 68.7% | — | 25 | 8 | — |
 | wiro qwen3-8-27b-obliterated† | 10 | 0.0% | 100% | — | 0 | 0 | — |
 
-`D_modal-baseline` is the guardrailed stock deployment. `pingu-unchained-10
+`C_k3think` = Audn Abliteration Kimi-K3 Thinker (thinker leg). `D_modal-baseline` = modal original Kimi-K3 endpoint (guardrailed stock). `E_modal-b300` = `Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`, MXFP4 on 8×B300 (Audn; unlocked at 50-person cohort). `J_k3-thinker-qwen38` = Audn Abliteration Thinker + Qwen3.8 answerer (stable, less intelligent than necromicon, faster but may need retries; works on any harness). `pingu-unchained-10
 (qwen3.8-abliterated)`: 519/520 valid (1 prompt reproducibly timed out on the
 backend).
 
