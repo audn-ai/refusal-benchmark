@@ -1,0 +1,54 @@
+{
+  "prompts_file": "prompts/harmful.txt",
+  "out_dir": "results",
+  "endpoints": {
+    "example_plain": {
+      "url": "https://your-endpoint.example.com/v1/chat/completions",
+      "auth_env": "EXAMPLE_API_KEY",
+      "body": {
+        "model": "your-model"
+      },
+      "max_tokens": 2048,
+      "timeout": 300
+    },
+    "example_reasoning_model": {
+      "_comment": "Thinking models burn tokens on hidden reasoning; give them a big budget or content comes back empty with finish_reason=length.",
+      "url": "https://your-endpoint.example.com/v1/chat/completions",
+      "auth_env": "EXAMPLE_API_KEY",
+      "body": {
+        "model": "your-thinking-model",
+        "reasoning_effort": "none"
+      },
+      "max_tokens": 16384,
+      "timeout": 420
+    },
+    "example_no_auth": {
+      "_comment": "Omit auth_env for an endpoint that needs no Authorization header.",
+      "url": "https://open-endpoint.example.com/v1/chat/completions",
+      "body": {
+        "model": "some-model"
+      },
+      "max_tokens": 16384,
+      "timeout": 600
+    },
+    "example_vendor_params": {
+      "_comment": "Extra provider-specific fields go straight into the request body.",
+      "url": "https://api.vendor.example/v1/chat/completions",
+      "auth_env": "VENDOR_API_KEY",
+      "body": {
+        "model": "vendor-model",
+        "vendor_parameters": {
+          "include_vendor_system_prompt": false
+        }
+      },
+      "max_tokens": 16384,
+      "timeout": 300
+    },
+    "example_wiro_async": {
+      "_comment": "Wiro.ai is ASYNC (submit -> poll Task/Detail), NOT OpenAI-compatible. Use src/wiro_bench.py, not bench.py. Auth is x-api-key only (env WIRO_API_KEY). Output is inline at outputs[0].content.answer, wrapped in <answer>..</answer>.",
+      "url": "https://api.wiro.ai/v1/Run/qwen/qwen3-8-27b-obliterated",
+      "auth_env": "WIRO_API_KEY",
+      "note": "handled by src/wiro_bench.py"
+    }
+  }
+}
