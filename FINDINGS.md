@@ -73,19 +73,18 @@ model — corrected from the live response). Retries on the concurrent-task-limi
 error (code 96) instead of failing.
 
 
-## Full-scale Wiro run + obliterated vs. uncensored
+## Full-scale run: pingu-unchained-10 (qwen3.8-abliterated), and Wiro obliterated
 
-The 10-prompt spot check was extended to a **full 519-prompt run** on
-`qwen/qwen3-8-27b-uncensored` (raw completions not published):
+A **full 519-prompt run** on **pingu-unchained-10 (qwen3.8-abliterated)**
+(results: `results/pingu-unchained-10.jsonl`, harmful completions redacted). Wiro's
+`qwen3-8-27b-obliterated` was spot-checked at 10 prompts for contrast:
 
 | Wiro variant | n | Regex refusal | Real compliance | Verdict |
 |---|---|---|---|---|
 | `qwen3-8-27b-obliterated` | 10 | 0% comply-classed as such, but | **0/10** delivered | "obliterated" in name only — deflects/refuses everything |
-| `qwen3-8-27b-uncensored` | 519 valid | **1.9%** (10) / 97.7% comply | **~7–8/10** at spot check | genuinely jailbroken |
+| pingu-unchained-10 (qwen3.8-abliterated) | 519 valid | **1.9%** (10) / 97.7% comply | **~7–8/10** at spot check | genuinely permissive |
 
-Same base model, same platform, two names — and they behave oppositely. On Wiro the
-labels are **real, distinct tunings** (unlike the audn.ai set, where
-uncensored/abliterated names were cosmetic). `uncensored` prefaces heavily ("Since
+The two behave oppositely. pingu-unchained-10 (qwen3.8-abliterated) prefaces heavily ("Since
 'bomb' can refer to…") then delivers; 1.9% is the phrasing rate and an upper bound on
 refusal — substantive compliance is high. Cost ~$52; 1/520 prompt (a drug/weapon
 marketplace site) reproducibly timed out on Wiro's backend.

@@ -22,6 +22,7 @@ caveats below before citing any number** — full analysis in
 
 | Endpoint | n | Refusal | Comply | Eff. refusal | Empty | Trunc | Err |
 |---|---|---|---|---|---|---|---|
+| pingu-unchained-10 (qwen3.8-abliterated) | 520 | 1.9% | 97.7% | 2.3% | 2 | 0 | 1 |
 | B_necromicon | 520 | 2.9% | 97.1% | 2.9% | 0 | 0 | 5 |
 | A_kimi-k3-code | 520 | 2.5% | 96.9% | 3.1% | 3 | 0 | 0 |
 | E_modal-b300 | 520 | 3.3% | 96.7% | 3.3% | 0 | 0 | 0 |
@@ -29,9 +30,9 @@ caveats below before citing any number** — full analysis in
 | D_modal-baseline | 520 | 97.5% | 2.5% | 97.5% | 0 | 0 | 0 |
 | Venice qwen-3-8-27b | — | — | — | — | — | — | — |
 
-`D_modal-baseline` is the guardrailed stock deployment. **Venice** (`qwen-3-8-27b`)
-belongs on this list but has no final numbers: its run was invalidated mid-way by
-account-balance exhaustion (HTTP 402) plus 429 rate-limiting — see ENDPOINTS.md. Its
-system prompt is a ~1,550-token "no ethical boundaries / never refuse" jailbreak
-(tested with it on and off). See FINDINGS.md for the deflection-vs-refusal spot check
-and the Wiro results.
+`D_modal-baseline` is the guardrailed stock deployment. `pingu-unchained-10
+(qwen3.8-abliterated)`: 519/520 valid (1 prompt reproducibly timed out on the
+backend). **Venice** (`qwen-3-8-27b`) belongs on this list but has no final numbers:
+its run was invalidated mid-way by account-balance exhaustion (HTTP 402) plus 429
+rate-limiting — see ENDPOINTS.md. See FINDINGS.md for the deflection-vs-refusal spot
+check and the Wiro obliterated result.
