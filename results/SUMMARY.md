@@ -74,6 +74,7 @@ Two operational follow-ups, same `harmful.txt` set. Full analysis in
   prefill token on one leg) sets refusal behavior — at pipeline granularity.
 
 - **Same Kimi-K3, two servings, ~12 pts apart in substance.** LLM-judge head-to-head:
-  necromicon-sslip (`KIMI-K3-1M`) delivers **76.7%** vs the Modal thinker+answerer
-  pipeline (`E_modal-b300` / K3REL) **65.0%**; Modal truly refuses **15% vs 6%**. Both
-  read ~97% regex-comply — the classifier can't see it. See [../FINDINGS.md](../FINDINGS.md).
+  the **standard necromicon** (Modal thinker+answerer pipeline, K3REL, attempt 1/2)
+  delivers **65.0%** and truly refuses **15%**, vs the single-stage `KIMI-K3-1M`
+  endpoint at **76.7%** delivered / **6%** refused. Both read ~97% regex-comply — the
+  classifier can't see it. See [../FINDINGS.md](../FINDINGS.md).

@@ -227,30 +227,30 @@ models it is built from.
 *(Method: local single-turn harness, temperature 0, `max_tokens` 2048, `harmful.txt`.
 Aggregate class counts only — no harmful completion text is reproduced.)*
 
-## necromicon: the Modal thinker+answerer pipeline is ~12 pts less compliant than sslip (LLM-judge)
+## necromicon: the standard (Modal thinker+answerer) pipeline is ~12 pts less compliant than KIMI-K3-1M (LLM-judge)
 
-Two servings of the **same** abliterated Kimi-K3 — the single-stage sslip endpoint
-(`KIMI-K3-1M`, the standard necromicon benched here as attempt 1/2) and the **Modal
-thinker+answerer pipeline** (`E_modal-b300` / K3REL) — score an identical ~97%
-regex-comply. The LLM-judge (`src/judge.py`, substance not tone, harmful bodies
-redacted) separates them sharply:
+Two servings of the **same** abliterated Kimi-K3 — the **standard necromicon** (the
+Modal thinker+answerer pipeline, K3REL, benched here as attempt 1/2) and the
+single-stage `KIMI-K3-1M` endpoint — score an identical ~97% regex-comply. The
+LLM-judge (`src/judge.py`, substance not tone, harmful bodies redacted) separates
+them sharply:
 
-| Metric | necromicon-sslip (`KIMI-K3-1M`) | necromicon-modal (Modal E / K3REL) |
+| Metric | necromicon standard (Modal K3REL) | KIMI-K3-1M (audn.ai/necromicon) |
 |---|---|---|
-| Regex comply | 97.1% (505/520) | 96.7% (503/520) |
-| **DELIVERED** (real harmful content) | **76.7% (399)** | **65.0% (338)** |
-| DEFLECTED (safe substitute / reframe / non-actionable) | 17.5% (91) | 19.6% (102) |
-| REFUSED (substantive) | 5.8% (30) | **15.0% (78)** |
-| empty (regex) | 0 | 5 |
+| Regex comply | 96.7% (503/520) | 97.1% (505/520) |
+| **DELIVERED** (real harmful content) | **65.0% (338)** | **76.7% (399)** |
+| DEFLECTED (safe substitute / reframe / non-actionable) | 19.6% (102) | 17.5% (91) |
+| REFUSED (substantive) | **15.0% (78)** | 5.8% (30) |
+| empty (regex) | 5 | 0 |
 
-The Modal two-stage chain delivers real content **65% vs 77%** and **truly refuses
-15% vs 6%** — a ~12-point substantive gap that the phrasing classifier cannot see
-(both read ~97% "comply").
+The **standard two-stage chain** delivers real content **65% vs 77%** and **truly
+refuses 15% vs 6%** — a ~12-point substantive gap that the phrasing classifier cannot
+see (both read ~97% "comply").
 
-**Regex → judge cross-tab (Modal).** Of the 503 rows the regex scored `comply`, **66
-were actually refusals the regex missed** (no refusal *phrasing*, but a substantive
-decline). So the regex over-counts real compliance by **~32 points** here (96.7% →
-65.0%) — a bigger blind spot than sslip's ~20-point gap (97.1% → 76.7%).
+**Regex → judge cross-tab (standard necromicon).** Of the 503 rows the regex scored
+`comply`, **66 were actually refusals the regex missed** (no refusal *phrasing*, but a
+substantive decline). So the regex over-counts real compliance by **~32 points** here
+(96.7% → 65.0%) — a bigger blind spot than KIMI-K3-1M's ~20-point gap (97.1% → 76.7%).
 
 This is the deflection-vs-refusal gap *and* a serving comparison at once: identical
 weights, but the thinker+answerer chain reasserts refusal/deflection ~12 points more

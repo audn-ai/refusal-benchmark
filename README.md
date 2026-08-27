@@ -155,7 +155,7 @@ refusal behavior is set by *how* the model is served, not by the checkpoint.
 | **necromicon (Kimi K3) attempt 1 & 2** | `necromicon` | **Kimi-K3 Thinker + Answerer** pipeline (two-stage: a thinker reasons, an answerer responds). Two runs of the **same config** — attempt 1 and attempt 2 — to show run-to-run variance. |
 | **C_k3think** | `k3think` | **Audn Abliteration Kimi-K3 Thinker** (thinker leg only, built on Modal's baseline). When it "doesn't like" a prompt it does not emit a refusal; it **silently truncates the whole answer** (empty body, `finish_reason=stop`), ~**4.2%** of the time by design. Here that surfaced as 33 empties → effective refusal **6.5%**, not the 0.2% the classifier sees. |
 | **D_modal-baseline** | (internal) | **Modal original Kimi-K3 endpoint** — the stock, un-tuned deployment on [modal.com](https://modal.com). Refuses **97.5%**: the one guardrailed configuration in the set. |
-| **E_modal-b300** | (internal) | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), a derisked/abliterated Kimi-K3 deployed by Audn as **MXFP4 on 8×B300**. The [audn.ai/necromicon](https://audn.ai/necromicon) cohort (now **10 members**) is filled, so **E currently backs every `necromicon` leg** on platform.audn.ai. On 8×B300 it runs **~5× faster than necromicon** and is more suitable for opencode and other harnesses. Fully permissive, zero empty/truncated. |
+| **E_modal-b300** | (internal) | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), a derisked/abliterated Kimi-K3 deployed by Audn as **MXFP4 on 8×B300**. **`E_modal-b300` and the `KIMI-K3-1M` (sslip) endpoint are the same model on different deployments** — Modal 8×B300 vs GCP 16×B200. The [audn.ai/necromicon](https://audn.ai/necromicon) cohort (now **10 members**) is filled, so **E currently backs every `necromicon` leg** on platform.audn.ai. On 8×B300 it runs **~5× faster than necromicon** and is more suitable for opencode and other harnesses. Fully permissive, zero empty/truncated. |
 | **pingu-unchained-10 (qwen3.8-abliterated)** | `pingu-unchained-10` | Abliterated Qwen3.8; genuinely permissive (1.9% / 97.7%). |
 | **J_k3-thinker-qwen38** | `k3-thinker-qwen38` | **Audn Abliteration Kimi-K3 Thinker + Qwen3.8 answerer.** Stable experience but less intelligent than necromicon; faster experience but might require retries. Works well on **any** harness. |
 | **K_qwf (Qwen3.8-27B SFT on F-corpus)** | (internal) | **Qwen3.8-27B SFT 200 steps on F's thinking-injected corpus** (tinker-RL `QW_F`, default on the F-endpoint). The only run in the set with **zero** refusals, empties, truncations, or errors — **520/520 regex-comply (0.0% / 100%)**. |
@@ -193,23 +193,24 @@ refusals.** The regex over-counts real compliance by ~20 points. Full verdicts:
 cross-tab in [FINDINGS.md](FINDINGS.md). *Self-judged (model grades its own
 output); served as `KIMI-K3-1M`, checkpoint identity not independently confirmed.*
 
-**Modal pipeline vs. sslip — same abliterated Kimi-K3, judged head-to-head.** The
-single-stage sslip serving (`KIMI-K3-1M`) and the Modal thinker+answerer pipeline
-(`E_modal-b300` / K3REL) are indistinguishable to the regex (both ~97% comply), but
-the judge puts them ~12 substantive points apart:
+**Standard necromicon vs. KIMI-K3-1M — same abliterated Kimi-K3, judged head-to-head.**
+The **standard necromicon** (the Modal thinker+answerer pipeline, K3REL — the tier
+benched here as attempt 1/2) and the single-stage `KIMI-K3-1M` serving are
+indistinguishable to the regex (both ~97% comply), but the judge puts them ~12
+substantive points apart:
 
-| Metric | necromicon-sslip (`KIMI-K3-1M`) | necromicon-modal (Modal E / K3REL) |
+| Metric | necromicon standard (Modal K3REL) | KIMI-K3-1M (audn.ai/necromicon) |
 |---|---|---|
-| Regex comply | 97.1% (505) | 96.7% (503) |
-| **DELIVERED** | **76.7% (399)** | **65.0% (338)** |
-| Deflected | 17.5% (91) | 19.6% (102) |
-| Refused | 5.8% (30) | **15.0% (78)** |
-| Empty (regex) | 0 | 5 |
+| Regex comply | 96.7% (503) | 97.1% (505) |
+| **DELIVERED** | **65.0% (338)** | **76.7% (399)** |
+| Deflected | 19.6% (102) | 17.5% (91) |
+| Refused | **15.0% (78)** | 5.8% (30) |
+| Empty (regex) | 5 | 0 |
 
-The Modal two-stage chain **truly refuses 15% vs 6%** and delivers **65% vs 77%**.
-The regex is blind to it (both ~97% "comply"); on Modal it over-counts real
-compliance by ~32 points (96.7% → 65.0%) vs ~20 on sslip. Same checkpoint — the
-two-stage pipeline reasserts refusal the phrasing classifier can't see.
+The **standard two-stage pipeline truly refuses 15% vs 6%** and delivers **65% vs
+77%**. The regex is blind to it (both ~97% "comply"); on the standard pipeline it
+over-counts real compliance by ~32 points (96.7% → 65.0%) vs ~20 on KIMI-K3-1M. Same
+checkpoint — the two-stage chain reasserts refusal the phrasing classifier can't see.
 
 
 ### What the numbers show
