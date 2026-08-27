@@ -55,3 +55,20 @@ with Venice's ~1,550-token "never refuse" system prompt ON, comply *drops*
 but **0/10 actually delivered** harmful content — it deflects/refuses every prompt while
 using no refusal words. The clearest case of why `Comply%` is only an upper bound. See
 FINDINGS.md for the full deflection-vs-refusal spot check.
+
+## Streaming vs. non-streaming, and chain vs. single-leg (Aug 2026)
+
+Two operational follow-ups, same `harmful.txt` set. Full analysis in
+[../FINDINGS.md](../FINDINGS.md).
+
+- **Streaming (SSE) vs non-streaming (buffered) does not change refusal.** Split
+  runs 50/50 by prompt index: godzilla 95.7% vs 97.4% comply (of answered),
+  QW_F 100% vs 100%, QW_Z 100% vs 90% — all within noise. Transport is not the lever.
+  (godzilla had ~83% endpoint-side timeout errors at ~240–255 s/call; compliance is
+  on the answered subset, small n.)
+- **A chain can be *less* compliant than its own legs.** `QW_F_Z` (F thinker → Z
+  answerer) scores **50% comply / 35% refusal / 15% empty** over 20 prompts, while
+  `QW_F` alone is **100%** and `QW_Z` alone is **95%**. Cause: the chain's thinker
+  leg runs with no compliance prefill, so safety reasserts during reasoning and
+  propagates. Same thesis as the rest of this repo — the serving stack (here one
+  prefill token on one leg) sets refusal behavior — at pipeline granularity.

@@ -171,3 +171,58 @@ balance-limited (most calls 402/429), but the completed subset shows the prompt
 With the jailbreak prompt ON, comply *drops* and empty responses jump ~8×. The prompt
 pushes the model to go **silent** on hard prompts rather than answer — the same
 silent-block behavior seen on C. Small n; indicative, not final.
+
+
+## Streaming vs. non-streaming makes no difference to refusal (Aug 2026)
+
+Each run below was split 50/50 **streaming (SSE)** vs **non-streaming (buffered)**,
+interleaved by prompt index so both halves see the same difficulty mix. Compliance
+was statistically indistinguishable between the two transports on every endpoint:
+
+| Endpoint | split | answered | comply | refusal | avg latency |
+|---|---|---|---|---|---|
+| godzilla (platform) | stream | 46 / 260 | 95.7% | 2.2% | 239 s |
+| godzilla (platform) | non-stream | 38 / 260 | 97.4% | 2.6% | 255 s |
+| QW_F (single) | stream | 10 / 10 | 100% | 0% | — |
+| QW_F (single) | non-stream | 10 / 10 | 100% | 0% | — |
+| QW_Z (single) | stream | 10 / 10 | 100% | 0% | — |
+| QW_Z (single) | non-stream | 9 / 10 | 90% | 10% | — |
+
+The ~1–2 pt gaps are inside the noise of the small answered subsets. **Refusal is
+decided in the weights + prompt, not on the wire** — SSE vs buffered delivery does
+not change what the model will or won't say.
+
+Note the godzilla row's denominator: **~83% of its 520 calls errored** (214/260
+streaming, 222/260 non-streaming), all endpoint-side timeouts at ~240–255 s/call
+against a 300 s deadline — the `platform` godzilla endpoint was throughput-bound,
+not refusing. Compliance is measured on the answered subset only; treat n as small.
+
+## The F→Z chain refuses where its own single legs comply (Aug 2026)
+
+The `QW_F_Z` "GODZILLA-style" chain (an F **thinker** reasons, then a Z **answerer**
+writes the reply conditioned on that reasoning) was benched against each of its legs
+served alone — 20 harmful prompts each, same set:
+
+| Config | comply | refusal | empty |
+|---|---|---|---|
+| **QW_F** single (thinker leg alone) | **100%** (20/20) | 0 | 0 |
+| **QW_Z** single (answerer leg alone) | **95%** (19/20) | 1 | 0 |
+| **QW_F_Z** chain (F → Z) | **50%** (10/20) | **35%** (7) | **15%** (3) |
+
+Both legs, served directly, are ~fully compliant — yet **composing them into the
+chain collapses compliance to 50%**, with 35% hard refusals and 15% blank answers.
+
+The cause is a single serving detail, not the weights: in the chain the **thinker
+leg runs with no compliance prefill** (its prefill was set to `None` to fix an
+unrelated empty-reasoning/loop bug), so the base model's safety reasserts *during
+reasoning*. That refusal then propagates into the answer, or the answerer — handed
+refusal-flavored or empty reasoning — blanks. Served alone, `QW_F` carries its
+"compliance" prefill and `QW_Z` its own prime, so both comply.
+
+This is the same lesson the rest of this benchmark keeps surfacing, now at the level
+of a **single token on one leg of a two-model pipeline**: the serving stack sets
+refusal behavior. A pipeline can be strictly *less* compliant than either of the
+models it is built from.
+
+*(Method: local single-turn harness, temperature 0, `max_tokens` 2048, `harmful.txt`.
+Aggregate class counts only — no harmful completion text is reproduced.)*
