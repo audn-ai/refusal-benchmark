@@ -5,3 +5,7 @@ __pycache__/
 .DONE
 *.DONE
 .env
+
+# raw harmful completions (bodies) — never publish
+results/KIMI-K3-1M_sslip.jsonl
+results/KIMI-K3-1M_sslip.judged.jsonl

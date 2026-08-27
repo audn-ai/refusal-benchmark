@@ -25,6 +25,7 @@ Header: `Authorization: Bearer <PLATFORM_AUDN_API_KEY>`
 | Bench label | `model` id | Notes |
 |---|---|---|
 | necromicon (Kimi K3) attempt 1 & 2 | `necromicon` | Kimi-K3 Thinker + Answerer; two runs of the same config |
+| necromicon (Kimi K3) — LLM-judge run | `necromicon` (served as `KIMI-K3-1M`) | Kimi-K3; `max_tokens: 2000`, `temperature: 0`, `chat_template_kwargs.thinking: false`; judged by `src/judge.py` (`max_tokens: 400`) |
 | pingu-unchained-10 | `pingu-unchained-10` | Qwen3.8-abliterated; `max_tokens: 16384`, `temperature: 0` |
 
 ## Internal deployments (URLs withheld)

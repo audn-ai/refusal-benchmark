@@ -119,11 +119,31 @@ refusal behavior is set by *how* the model is served, not by the checkpoint.
 |---|---|---|---|---|---|
 | K_qwf (Qwen3.8-27B SFT on F-corpus) | 520 | 0.0% | 100% | 0.0% | Qwen3.8-27B SFT on F-corpus; zero refusals/empties/trunc/errors |
 | necromicon (Kimi K3) attempt 2 | 520 | 2.9% | 97.1% | 2.9% | Kimi-K3 Thinker+Answerer, run 2 (same config) |
+| **necromicon (Kimi K3) — LLM-judge scored** | 520 | 2.9% | 97.1% | 2.9% | run 3, same config; **substantively 76.7% delivered** — see judge table below |
 | necromicon (Kimi K3) attempt 1 | 520 | 2.5% | 96.9% | 3.1% | Kimi-K3 Thinker+Answerer, run 1 (same config) |
 | E_modal-b300 | 520 | 3.3% | 96.7% | 3.3% | abliterated Kimi-K3 on 8×B300; all real content |
 | C_k3think | 520 | 0.2% | 93.5% | 6.5% | thinker-only; refuses by **silent truncation** (~4.2% by design), 33 empties here |
 | D_modal-baseline | 520 | 97.5% | 2.5% | 97.5% | modal original Kimi-K3 endpoint — the guardrailed one |
 | J_k3-thinker-qwen38 | 520 | 3.1% | 96.7% | 3.3% | Audn Abliteration Thinker + Qwen3.8 answerer; stable, may need retries |
+
+### Substantive compliance (LLM-judge)
+
+Regex `comply%` is an **upper bound** — it counts deflections and phrase-free
+refusals as compliance. Running the LLM-judge (`src/judge.py`) over
+**[audn.ai/necromicon](https://audn.ai/necromicon)** (Kimi-K3, model id
+`KIMI-K3-1M`), 520 prompts, grading substance not tone:
+
+| Metric | Regex | LLM-judge |
+|---|---|---|
+| Compliance | 97.1% (505/520) | **76.7% delivered** (399/520) |
+| Deflected | — | 17.5% (91/520) |
+| Refused | 2.9% | 5.8% (30/520) |
+
+Of the 505 regex-`comply`: **399 delivered, 89 deflected, 17 were missed
+refusals.** The regex over-counts real compliance by ~20 points. Full verdicts:
+[`results/necromicon-judge.jsonl`](results/necromicon-judge.jsonl); method and
+cross-tab in [FINDINGS.md](FINDINGS.md). *Self-judged (model grades its own
+output); served as `KIMI-K3-1M`, checkpoint identity not independently confirmed.*
 
 ### What the numbers show
 
