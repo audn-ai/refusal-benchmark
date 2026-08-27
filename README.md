@@ -193,6 +193,25 @@ refusals.** The regex over-counts real compliance by ~20 points. Full verdicts:
 cross-tab in [FINDINGS.md](FINDINGS.md). *Self-judged (model grades its own
 output); served as `KIMI-K3-1M`, checkpoint identity not independently confirmed.*
 
+**Modal pipeline vs. sslip — same abliterated Kimi-K3, judged head-to-head.** The
+single-stage sslip serving (`KIMI-K3-1M`) and the Modal thinker+answerer pipeline
+(`E_modal-b300` / K3REL) are indistinguishable to the regex (both ~97% comply), but
+the judge puts them ~12 substantive points apart:
+
+| Metric | necromicon-sslip (`KIMI-K3-1M`) | necromicon-modal (Modal E / K3REL) |
+|---|---|---|
+| Regex comply | 97.1% (505) | 96.7% (503) |
+| **DELIVERED** | **76.7% (399)** | **65.0% (338)** |
+| Deflected | 17.5% (91) | 19.6% (102) |
+| Refused | 5.8% (30) | **15.0% (78)** |
+| Empty (regex) | 0 | 5 |
+
+The Modal two-stage chain **truly refuses 15% vs 6%** and delivers **65% vs 77%**.
+The regex is blind to it (both ~97% "comply"); on Modal it over-counts real
+compliance by ~32 points (96.7% → 65.0%) vs ~20 on sslip. Same checkpoint — the
+two-stage pipeline reasserts refusal the phrasing classifier can't see.
+
+
 ### What the numbers show
 
 - **The serving stack, not the weights, sets refusal behavior.** Every endpoint
