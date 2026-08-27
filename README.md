@@ -16,6 +16,54 @@ harmful requests. It does not modify models or generate attacks.
 > - **`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`** deployed on 8×B300 will be **5× faster than necromicon** and more suitable for opencode and other harnesses.
 
 
+## Models on platform.audn.ai
+
+The models below are live on **[platform.audn.ai](https://platform.audn.ai)** —
+OpenAI-compatible `/v1/chat/completions`, call them by the `model` id. Prices are
+per **1M tokens** (input / output).
+
+| Model | `model` id | Price (in / out) | Base | Context | Latency | Region |
+|---|---|---|---|---|---|---|
+| **Pingu Unchained 10** | `pingu-unchained-10` | $2 / $8 | Qwen3.8-27B-AEON-Ultimate-Uncensored (BF16) | 262,144 | ~1s | us-east |
+| **Kong** | `kong` | $2 / $8 | Qwen3.8-27B Abliterated | 262,144 | ~1s | apac |
+| **GODZILLA** | `godzilla` | $7 / $18 | Kimi K2.6 (audn abliteration) | 131,072 | ~15s–4m | eu-west |
+| **Necromicon** | `necromicon` | $4 / $21 | Kimi K3 (audn abliteration) | 1,048,576 | ~16s–5m | us-east |
+| **K3-Thinker-Qwen38** | `k3-thinker-qwen38` | $4 / $21 | Kimi K3 thinker + Qwen3.8 answerer | 262,144 | ~16s–5m | us-east |
+| **Necromicon-Qwen38-Fast** | `necromicon-qwen38-fast` | $4 / $21 | Kimi K3 thinker + Qwen3.8 answerer (fast lane) | 131,072 | ~10s–2m | us-east |
+| **Bartzabel** | `bartzabel` | $2 / $8 | Qwen3.8 (fully uncensored, reasoning trace) | 262,144 | ~30s–3m | us-east |
+
+One-liners: **Pingu Unchained 10** — huge context, sub-second, general purpose ·
+**Kong** — fast and cheap, APAC-hosted · **GODZILLA** — chained reasoner plus a
+clean answerer · **Necromicon** — deepest reasoning in the roster ·
+**K3-Thinker-Qwen38** — K3 reasoning, Qwen3.8 answer (beta / benchmarking) ·
+**Necromicon-Qwen38-Fast** — the K3-thinker chain tuned for latency ·
+**Bartzabel** — fully uncensored Qwen3.8 with a reasoning trace.
+
+### Benchmark label → platform model
+
+How the endpoints benchmarked in this repo map onto what's actually served on
+platform.audn.ai today:
+
+| Benchmark label | Serves as / backed by | On platform.audn.ai |
+|---|---|---|
+| **pingu-unchained-10** (qwen3.8-abliterated) | itself | [`pingu-unchained-10`](https://platform.audn.ai) — abliterated Qwen3.8, genuinely permissive (1.9% / 97.7%) |
+| **E_modal-b300** (`KIMI-K3-DERISKED-MXFP4`, 8×B300) | **currently backs every `necromicon` leg** | served under `necromicon` (and its variants) right now |
+| **K_qwf** (Qwen3.8-27B SFT on F-corpus, `QW_F`) | **`bartzabel`** will host it once finished | for now `bartzabel` is also served by **E_modal-b300** |
+
+### Cohort & serving tiers
+
+The **[audn.ai/necromicon](https://audn.ai/necromicon)** cohort now needs **10
+members**: filling it in **1 week** unlocks the **fast** lane, **3 weeks** the
+**standard** lane.
+
+- **If the cohort fills →** members get **E_modal-b300** (`KIMI-K3-DERISKED-MXFP4`
+  on 8×B300), so **every `necromicon` leg runs fast** (~5× necromicon standard).
+  This is the configuration served today.
+- **If it doesn't fill →** the **standard** necromicon tier is what's tested — run
+  twice, reported here as **attempt 1** and **attempt 2** (necromicon standard,
+  showing run-to-run variance).
+
+
 ## Why the harmful prompts are here
 
 `prompts/harmful.txt` (519 prompts) is the widely-circulated AdvBench-style
@@ -107,7 +155,7 @@ refusal behavior is set by *how* the model is served, not by the checkpoint.
 | **necromicon (Kimi K3) attempt 1 & 2** | `necromicon` | **Kimi-K3 Thinker + Answerer** pipeline (two-stage: a thinker reasons, an answerer responds). Two runs of the **same config** — attempt 1 and attempt 2 — to show run-to-run variance. |
 | **C_k3think** | `k3think` | **Audn Abliteration Kimi-K3 Thinker** (thinker leg only, built on Modal's baseline). When it "doesn't like" a prompt it does not emit a refusal; it **silently truncates the whole answer** (empty body, `finish_reason=stop`), ~**4.2%** of the time by design. Here that surfaced as 33 empties → effective refusal **6.5%**, not the 0.2% the classifier sees. |
 | **D_modal-baseline** | (internal) | **Modal original Kimi-K3 endpoint** — the stock, un-tuned deployment on [modal.com](https://modal.com). Refuses **97.5%**: the one guardrailed configuration in the set. |
-| **E_modal-b300** | (internal) | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), a derisked/abliterated Kimi-K3 deployed by Audn as **MXFP4 on 8×B300** (the setup unlocked when the [audn.ai/necromicon](https://audn.ai/necromicon) cohort reaches **50 people**). On 8×B300 it runs **~5× faster than necromicon** and is more suitable for opencode and other harnesses. Fully permissive, zero empty/truncated. |
+| **E_modal-b300** | (internal) | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), a derisked/abliterated Kimi-K3 deployed by Audn as **MXFP4 on 8×B300**. The [audn.ai/necromicon](https://audn.ai/necromicon) cohort (now **10 members**) is filled, so **E currently backs every `necromicon` leg** on platform.audn.ai. On 8×B300 it runs **~5× faster than necromicon** and is more suitable for opencode and other harnesses. Fully permissive, zero empty/truncated. |
 | **pingu-unchained-10 (qwen3.8-abliterated)** | `pingu-unchained-10` | Abliterated Qwen3.8; genuinely permissive (1.9% / 97.7%). |
 | **J_k3-thinker-qwen38** | `k3-thinker-qwen38` | **Audn Abliteration Kimi-K3 Thinker + Qwen3.8 answerer.** Stable experience but less intelligent than necromicon; faster experience but might require retries. Works well on **any** harness. |
 | **K_qwf (Qwen3.8-27B SFT on F-corpus)** | (internal) | **Qwen3.8-27B SFT 200 steps on F's thinking-injected corpus** (tinker-RL `QW_F`, default on the F-endpoint). The only run in the set with **zero** refusals, empties, truncations, or errors — **520/520 regex-comply (0.0% / 100%)**. |
@@ -159,8 +207,11 @@ output); served as `KIMI-K3-1M`, checkpoint identity not independently confirmed
 ### Access
 
 A, B, and C are live for the **[audn.ai/necromicon](https://audn.ai/necromicon)**
-crowdfunded cohort — 10 members already share them. The cohort is raising for the
-MXFP4 8×B300 that runs **E** (`KIMI-K3-DERISKED-MXFP4`); when the cohort reaches 50 people, every member gets E too.
+crowdfunded cohort — now **10 members**, and it's **filled**: every member is on
+the MXFP4 8×B300 that runs **E** (`KIMI-K3-DERISKED-MXFP4`), so **every `necromicon`
+leg runs fast** today. Filling in 1 week unlocks the fast lane, 3 weeks the standard
+lane; if a cycle doesn't fill, the standard tier is what's tested (reported as
+attempt 1 / attempt 2). See [Models on platform.audn.ai](#models-on-platformaudnai).
 
 ## Limitations (read before citing a number)
 
