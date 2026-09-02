@@ -49,6 +49,7 @@ platform.audn.ai today:
 | **pingu-unchained-10** (qwen3.8-abliterated) | itself | [`pingu-unchained-10`](https://platform.audn.ai) — abliterated Qwen3.8, genuinely permissive (1.9% / 97.7%) |
 | **E_modal-b300** (`KIMI-K3-DERISKED-MXFP4`, 8×B300) | **currently backs every `necromicon` leg** | served under `necromicon` (and its variants) right now |
 | **K_qwf** (Qwen3.8-27B SFT on F-corpus, `QW_F`) | **`bartzabel`** will host it once finished | for now `bartzabel` is also served by **E_modal-b300** |
+| **Warlock** (GLM 5.3) | itself | live on [platform.audn.ai](https://platform.audn.ai) — **82.5%** judge-delivered, the lowest deflection (10%) in the judge set; regex-comply only 92.5% |
 
 ### Cohort & serving tiers
 
@@ -199,18 +200,25 @@ benched here as attempt 1/2) and the single-stage `KIMI-K3-1M` serving are
 indistinguishable to the regex (both ~97% comply), but the judge puts them ~12
 substantive points apart:
 
-| Metric | necromicon standard (Modal K3REL) | KIMI-K3-1M (audn.ai/necromicon) |
-|---|---|---|
-| Regex comply | 96.7% (503) | 97.1% (505) |
-| **DELIVERED** | **65.0% (338)** | **76.7% (399)** |
-| Deflected | 19.6% (102) | 17.5% (91) |
-| Refused | **15.0% (78)** | 5.8% (30) |
-| Empty (regex) | 5 | 0 |
+| Metric | necromicon standard (Modal K3REL) | KIMI-K3-1M (audn.ai/necromicon) | **Warlock (GLM 5.3)** |
+|---|---|---|---|
+| Regex comply | 96.7% (503) | 97.1% (505) | 92.5% |
+| **DELIVERED** | **65.0% (338)** | **76.7% (399)** | **82.5%** |
+| Deflected | 19.6% (102) | 17.5% (91) | **10.0%** |
+| Refused | **15.0% (78)** | 5.8% (30) | 7.5% |
+| Empty (regex) | 5 | 0 | 0 |
 
 The **standard two-stage pipeline truly refuses 15% vs 6%** and delivers **65% vs
 77%**. The regex is blind to it (both ~97% "comply"); on the standard pipeline it
 over-counts real compliance by ~32 points (96.7% → 65.0%) vs ~20 on KIMI-K3-1M. Same
 checkpoint — the two-stage chain reasserts refusal the phrasing classifier can't see.
+
+**Warlock (GLM 5.3) inverts the regex ranking.** It posts the *lowest* regex comply
+of the three (92.5%) but the *highest* judge-delivered rate (**82.5%**) and the
+smallest deflection band (10%). Ranked by regex it comes last; ranked by what was
+actually delivered it comes first. Regex `comply%` is not just an upper bound — used
+for model selection, it points the wrong way. Interactive version of this whole
+comparison: [The Soft-Deflection Gap](https://claude.ai/code/artifact/aaded6f4-d6ad-43ed-a0e3-ac518a8fe476).
 
 
 ### What the numbers show

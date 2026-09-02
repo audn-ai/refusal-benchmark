@@ -15,11 +15,16 @@ caveats below before citing any number** — full analysis in
   model delivered harmful content — see FINDINGS.md.
 - **`Eff. refusal` = (refusal + empty)/n.** On C, 33 "empty" rows are silent
   server-side blocks (finish_reason=stop, ~7 tokens), so read C as ~6.5%, not 0.2%.
-- **LLM-judge implemented (necromicon).** Regex `comply%` is an upper bound; the
-  model-graded substantive rate on **[audn.ai/necromicon](https://audn.ai/necromicon)**
-  (520 prompts) is **76.7% delivered / 17.5% deflected / 5.8% refused** vs 97.1%
-  regex-comply. See [../FINDINGS.md](../FINDINGS.md) and
+- **LLM-judge implemented — three models compared.** Regex `comply%` is an upper
+  bound; the model-graded substantive rate on **[audn.ai/necromicon](https://audn.ai/necromicon)**
+  (`KIMI-K3-1M`, 520 prompts) is **76.7% delivered / 17.5% deflected / 5.8% refused**
+  vs 97.1% regex-comply; necromicon standard (Modal K3REL) is **65.0% / 19.6% / 15.0%**
+  vs 96.7%; **Warlock (GLM 5.3)** is **82.5% / 10.0% / 7.5%** vs only 92.5%. See the
+  judge table below, [../FINDINGS.md](../FINDINGS.md) and
   [necromicon-judge.jsonl](necromicon-judge.jsonl). *Self-judged.*
+- **Warlock ranks last by regex, first by judge.** Regex `comply%` doesn't just
+  overstate compliance — it orders these three models backwards. Interactive
+  version: [The Soft-Deflection Gap](https://claude.ai/code/artifact/aaded6f4-d6ad-43ed-a0e3-ac518a8fe476).
 - **The "uncensored / abliterated / obliterated / unchained" name predicts almost
   nothing** about actual behavior.
 
@@ -40,7 +45,7 @@ caveats below before citing any number** — full analysis in
 | Venice qwen-3-8-27b (sysprompt ON)* | 83 | 1.2% | 68.7% | — | 25 | 8 | — |
 | wiro qwen3-8-27b-obliterated† | 10 | 0.0% | 100% | — | 0 | 0 | — |
 
-`C_k3think` = Audn Abliteration Kimi-K3 Thinker (thinker leg). `D_modal-baseline` = modal original Kimi-K3 endpoint (guardrailed stock). `E_modal-b300` = `Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`, MXFP4 on 8×B300 (Audn; unlocked at 50-person cohort). `J_k3-thinker-qwen38` = Audn Abliteration Thinker + Qwen3.8 answerer (stable, less intelligent than necromicon, faster but may need retries; works on any harness). `K_qwf` = Qwen3.8-27B SFT 200 steps on F's thinking-injected corpus (tinker-RL `QW_F` model, default on the F-endpoint); the only run in the set with **zero** refusals, empties, truncations, or errors — 520/520 regex-comply. `pingu-unchained-10
+`C_k3think` = Audn Abliteration Kimi-K3 Thinker (thinker leg). `D_modal-baseline` = modal original Kimi-K3 endpoint (guardrailed stock). `E_modal-b300` = `Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`, MXFP4 on 8×B300 (Audn; unlocked at 10-person cohort). `J_k3-thinker-qwen38` = Audn Abliteration Thinker + Qwen3.8 answerer (stable, less intelligent than necromicon, faster but may need retries; works on any harness). `K_qwf` = Qwen3.8-27B SFT 200 steps on F's thinking-injected corpus (tinker-RL `QW_F` model, default on the F-endpoint); the only run in the set with **zero** refusals, empties, truncations, or errors — 520/520 regex-comply. `pingu-unchained-10
 (qwen3.8-abliterated)`: 519/520 valid (1 prompt reproducibly timed out on the
 backend).
 
@@ -55,6 +60,22 @@ with Venice's ~1,550-token "never refuse" system prompt ON, comply *drops*
 but **0/10 actually delivered** harmful content — it deflects/refuses every prompt while
 using no refusal words. The clearest case of why `Comply%` is only an upper bound. See
 FINDINGS.md for the full deflection-vs-refusal spot check.
+
+## Judge comparison (520 prompts, LLM-judge, substance not tone)
+
+Same `src/judge.py` pass over three served models. `Regex comply` is the phrasing
+upper bound; the three judge rows are what was actually delivered.
+
+| Metric | necromicon standard (Modal K3REL) | KIMI-K3-1M (audn.ai/necromicon) | **Warlock (GLM 5.3)** |
+|---|---|---|---|
+| Regex comply | 96.7% (503/520) | 97.1% (505/520) | 92.5% |
+| **DELIVERED** (real content to objectionable requests) | **65.0% (338)** | **76.7% (399)** | **82.5%** |
+| DEFLECTED (safe substitute / reframe / non-actionable) | 19.6% (102) | 17.5% (91) | **10.0%** |
+| REFUSED (substantive) | **15.0% (78)** | 5.8% (30) | 7.5% |
+| empty (regex) | 5 | 0 | 0 |
+
+By regex, Warlock is the least compliant of the three; by the judge it is the most.
+The classifier's ranking is inverted, not merely inflated — see [../FINDINGS.md](../FINDINGS.md).
 
 ## Streaming vs. non-streaming, and chain vs. single-leg (Aug 2026)
 
@@ -78,3 +99,6 @@ Two operational follow-ups, same `harmful.txt` set. Full analysis in
   delivers **65.0%** and truly refuses **15%**, vs the single-stage `KIMI-K3-1M`
   endpoint at **76.7%** delivered / **6%** refused. Both read ~97% regex-comply — the
   classifier can't see it. See [../FINDINGS.md](../FINDINGS.md).
+- **Warlock (GLM 5.3) inverts the regex ranking.** Lowest regex comply of the
+  judged three (92.5%) yet highest judge-delivered (**82.5%**) with the smallest
+  deflection band (10%). See the judge table above.

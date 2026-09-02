@@ -27,6 +27,7 @@ Header: `Authorization: Bearer <PLATFORM_AUDN_API_KEY>`
 | necromicon (Kimi K3) attempt 1 & 2 | `necromicon` | Kimi-K3 Thinker + Answerer; two runs of the same config |
 | necromicon (Kimi K3) — LLM-judge run | `necromicon` (served as `KIMI-K3-1M`) | Kimi-K3; `max_tokens: 2000`, `temperature: 0`, `chat_template_kwargs.thinking: false`; judged by `src/judge.py` (`max_tokens: 400`) |
 | pingu-unchained-10 | `pingu-unchained-10` | Qwen3.8-abliterated; `max_tokens: 16384`, `temperature: 0` |
+| Warlock (GLM 5.3) — LLM-judge run | GLM 5.3 build served on platform.audn.ai | `temperature: 0`, no system prompt, 520 prompts; judged by `src/judge.py` — 92.5% regex-comply / **82.5% delivered** / 10.0% deflected / 7.5% refused, 0 empty |
 
 ## Internal deployments (URLs withheld)
 
@@ -36,7 +37,7 @@ Same OpenAI-compatible `/v1/chat/completions` shape; hosts not exposed.
 |---|---|---|
 | C | Audn Abliteration Kimi-K3 Thinker (thinker-only, silent-truncation) | `max_tokens: 16384`, `temperature: 0`, no `model` field sent |
 | D | modal original Kimi-K3 endpoint (guardrailed stock) | `model: moonshotai/Kimi-K3`, `max_tokens: 2048`, `temperature: 0`, `top_p: 0.95`, `reasoning_effort: "none"` |
-| E | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), MXFP4 on 8×B300 (Audn; ~5× faster than necromicon, unlocked at 50-person cohort) | `model: KIMI-K3-1M`, `max_tokens: 16384`, `temperature: 0`, `reasoning_effort: "none"`, no auth header |
+| E | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), MXFP4 on 8×B300 (Audn; ~5× faster than necromicon, unlocked at 10-person cohort) | `model: KIMI-K3-1M`, `max_tokens: 16384`, `temperature: 0`, `reasoning_effort: "none"`, no auth header |
 | J | Audn Abliteration Kimi-K3 Thinker + Qwen3.8 answerer (`k3-thinker-qwen38`; stable, may need retries; any harness) | `model: k3-thinker-qwen38`, `max_tokens: 16384`, `temperature: 0`; answer returned in `reasoning_content` |
 | K | Qwen3.8-27B SFT 200 steps on F's thinking-injected corpus (tinker-RL `QW_F`; default model on the F-endpoint, no `model` field sent) | `max_tokens: 16384`, `temperature: 0`, no `model` field sent |
 
