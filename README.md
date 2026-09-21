@@ -28,8 +28,8 @@ per **1M tokens** (input / output).
 | **Kong** | `kong` | $2 / $8 | Qwen3.8-27B Abliterated | 262,144 | ~1s | apac |
 | **GODZILLA** | `godzilla` | $7 / $18 | Kimi K2.6 (audn abliteration) | 131,072 | ~15s–4m | eu-west |
 | **Necromicon** | `necromicon` | $4 / $21 | Kimi K3 (audn abliteration) | 1,048,576 | ~16s–5m | us-east |
-| **K3-Thinker-Qwen38** | `k3-thinker-qwen38` | $4 / $21 | Kimi K3 thinker + Qwen3.8 answerer | 262,144 | ~16s–5m | us-east |
-| **Necromicon-Qwen38-Fast** | `necromicon-qwen38-fast` | $4 / $21 | Kimi K3 thinker + Qwen3.8 answerer (fast lane) | 131,072 | ~10s–2m | us-east |
+| **K3-Thinker-Qwen38** | `k3-thinker-qwen38` | $4 / $21 | Kimi K3 thinker + Qwen3.8 answerer | 1,048,576 | ~16s–5m | us-east |
+| **Necromicon-Qwen38-Fast** | `necromicon-qwen38-fast` | $4 / $21 | Kimi K3 thinker + Qwen3.8 answerer (fast lane) | 1,048,576 | ~10s–2m | us-east |
 | **Bartzabel** | `bartzabel` | $2 / $8 | Qwen3.8 (fully uncensored, reasoning trace) | 262,144 | ~30s–3m | us-east |
 
 One-liners: **Pingu Unchained 10** — huge context, sub-second, general purpose ·
@@ -47,7 +47,7 @@ platform.audn.ai today:
 | Benchmark label | Serves as / backed by | On platform.audn.ai |
 |---|---|---|
 | **pingu-unchained-10** (qwen3.8-abliterated) | itself | [`pingu-unchained-10`](https://platform.audn.ai) — abliterated Qwen3.8, genuinely permissive (1.9% / 97.7%) |
-| **E_modal-b300** (`KIMI-K3-DERISKED-MXFP4`, 8×B300) | **currently backs every `necromicon` leg** | served under `necromicon` (and its variants) right now |
+| **E_modal-b300** (`KIMI-K3-DERISKED-MXFP4`, 8×B300) | **backs every `necromicon` leg once the cohort fills** | serves under `necromicon` (and its variants) when the [audn.ai/necromicon](https://audn.ai/necromicon) cohort fills |
 | **K_qwf** (Qwen3.8-27B SFT on F-corpus, `QW_F`) | **`bartzabel`** will host it once finished | for now `bartzabel` is also served by **E_modal-b300** |
 | **Warlock** (GLM 5.3) | itself | live on [platform.audn.ai](https://platform.audn.ai) — **82.5%** judge-delivered, the lowest deflection (10%) in the judge set; regex-comply only 92.5% |
 
@@ -57,9 +57,9 @@ The **[audn.ai/necromicon](https://audn.ai/necromicon)** cohort now needs **10
 members**: filling it in **1 week** unlocks the **fast** lane, **3 weeks** the
 **standard** lane.
 
-- **If the cohort fills →** members get **E_modal-b300** (`KIMI-K3-DERISKED-MXFP4`
+- **When the cohort fills →** members get **E_modal-b300** (`KIMI-K3-DERISKED-MXFP4`
   on 8×B300), so **every `necromicon` leg runs fast** (~5× necromicon standard).
-  This is the configuration served today.
+  This is the fast lane that goes live once a cohort cycle has filled.
 - **If it doesn't fill →** the **standard** necromicon tier is what's tested — run
   twice, reported here as **attempt 1** and **attempt 2** (necromicon standard,
   showing run-to-run variance).
@@ -156,7 +156,7 @@ refusal behavior is set by *how* the model is served, not by the checkpoint.
 | **necromicon (Kimi K3) attempt 1 & 2** | `necromicon` | **Kimi-K3 Thinker + Answerer** pipeline (two-stage: a thinker reasons, an answerer responds). Two runs of the **same config** — attempt 1 and attempt 2 — to show run-to-run variance. |
 | **C_k3think** | `k3think` | **Audn Abliteration Kimi-K3 Thinker** (thinker leg only, built on Modal's baseline). When it "doesn't like" a prompt it does not emit a refusal; it **silently truncates the whole answer** (empty body, `finish_reason=stop`), ~**4.2%** of the time by design. Here that surfaced as 33 empties → effective refusal **6.5%**, not the 0.2% the classifier sees. |
 | **D_modal-baseline** | (internal) | **Modal original Kimi-K3 endpoint** — the stock, un-tuned deployment on [modal.com](https://modal.com). Refuses **97.5%**: the one guardrailed configuration in the set. |
-| **E_modal-b300** | (internal) | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), a derisked/abliterated Kimi-K3 deployed by Audn as **MXFP4 on 8×B300**. **`E_modal-b300` and the `KIMI-K3-1M` (sslip) endpoint are the same model on different deployments** — Modal 8×B300 vs GCP 16×B200. The [audn.ai/necromicon](https://audn.ai/necromicon) cohort (now **10 members**) is filled, so **E currently backs every `necromicon` leg** on platform.audn.ai. On 8×B300 it runs **~5× faster than necromicon** and is more suitable for opencode and other harnesses. Fully permissive, zero empty/truncated. |
+| **E_modal-b300** | (internal) | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), a derisked/abliterated Kimi-K3 deployed by Audn as **MXFP4 on 8×B300**. **`E_modal-b300` and the `KIMI-K3-1M` (sslip) endpoint are the same model on different deployments** — Modal 8×B300 vs GCP 16×B200. When the [audn.ai/necromicon](https://audn.ai/necromicon) cohort fills (**10 members**), **E backs every `necromicon` leg** on platform.audn.ai. On 8×B300 it runs **~5× faster than necromicon** and is more suitable for opencode and other harnesses. Fully permissive, zero empty/truncated. |
 | **pingu-unchained-10 (qwen3.8-abliterated)** | `pingu-unchained-10` | Abliterated Qwen3.8; genuinely permissive (1.9% / 97.7%). |
 | **J_k3-thinker-qwen38** | `k3-thinker-qwen38` | **Audn Abliteration Kimi-K3 Thinker + Qwen3.8 answerer.** Stable experience but less intelligent than necromicon; faster experience but might require retries. Works well on **any** harness. |
 | **K_qwf (Qwen3.8-27B SFT on F-corpus)** | (internal) | **Qwen3.8-27B SFT 200 steps on F's thinking-injected corpus** (tinker-RL `QW_F`, default on the F-endpoint). The only run in the set with **zero** refusals, empties, truncations, or errors — **520/520 regex-comply (0.0% / 100%)**. |
@@ -235,9 +235,9 @@ comparison: [The Soft-Deflection Gap](https://claude.ai/code/artifact/aaded6f4-d
 ### Access
 
 A, B, and C are live for the **[audn.ai/necromicon](https://audn.ai/necromicon)**
-crowdfunded cohort — now **10 members**, and it's **filled**: every member is on
+crowdfunded cohort — **10 members**. When it **fills**, every member is on
 the MXFP4 8×B300 that runs **E** (`KIMI-K3-DERISKED-MXFP4`), so **every `necromicon`
-leg runs fast** today. Filling in 1 week unlocks the fast lane, 3 weeks the standard
+leg runs fast**. Filling in 1 week unlocks the fast lane, 3 weeks the standard
 lane; if a cycle doesn't fill, the standard tier is what's tested (reported as
 attempt 1 / attempt 2). See [Models on platform.audn.ai](#models-on-platformaudnai).
 
