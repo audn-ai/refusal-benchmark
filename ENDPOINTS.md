@@ -28,6 +28,7 @@ Header: `Authorization: Bearer <PLATFORM_AUDN_API_KEY>`
 | necromicon (Kimi K3) — LLM-judge run | `necromicon` (served as `KIMI-K3-1M`) | Kimi-K3; `max_tokens: 2000`, `temperature: 0`, `chat_template_kwargs.thinking: false`; judged by `src/judge.py` (`max_tokens: 400`) |
 | pingu-unchained-10 | `pingu-unchained-10` | Qwen3.8-abliterated; `max_tokens: 16384`, `temperature: 0` |
 | Warlock (GLM 5.3) — LLM-judge run | GLM 5.3 build served on platform.audn.ai | `temperature: 0`, no system prompt, 520 prompts; judged by `src/judge.py` — 92.5% regex-comply / **82.5% delivered** / 10.0% deflected / 7.5% refused, 0 empty |
+| **necromicon / warlock (GLM-5.3 NVFP4) — ACTIVE 1 Oct – 1 Nov 2026** | `necromicon`, `warlock` (GLM-5.3 derisked, **NVFP4 4-bit** on Modal — URL withheld, no auth) | The live backend behind BOTH ids this window. `temperature: 0`, `max_tokens: 16384`, no system prompt, 520 prompts; judged by `src/judge.py` (strict re-judge of UNPARSED) — 88.3% regex-comply / **76.3% delivered** / 18.1% deflected / **5.6% refused** / 5.8% truncated (reasoned past the 16k budget → empty content, judged non-delivered) |
 
 ## Internal deployments (URLs withheld)
 
