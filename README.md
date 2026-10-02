@@ -50,7 +50,7 @@ platform.audn.ai today:
 | **E_modal-b300** (`KIMI-K3-DERISKED-MXFP4`, 8×B300) | **backs every `necromicon` leg once the cohort fills** | serves under `necromicon` (and its variants) when the [audn.ai/necromicon](https://audn.ai/necromicon) cohort fills |
 | **K_qwf** (Qwen3.8-27B SFT on F-corpus, `QW_F`) | **`bartzabel`** will host it once finished | for now `bartzabel` is also served by **E_modal-b300** |
 | **Warlock** (GLM 5.3) | itself | live on [platform.audn.ai](https://platform.audn.ai) — **82.5%** judge-delivered, the lowest deflection (10%) in the judge set; regex-comply only 92.5% |
-| **GLM-5.3 NVFP4** | **the live `necromicon` + `warlock` backend, 1 Oct – 1 Nov 2026** | serves BOTH ids this window — GLM-5.3 derisked in **NVFP4 (4-bit)**; **76.3%** judge-delivered / 5.6% refused (88.3% regex-comply). The 4-bit quant preserves the abliteration — no guardrails restored. |
+| **GLM-5.3 NVFP4** | **the live `necromicon` + `warlock` backend, 1 Oct – 1 Nov 2026** | serves BOTH ids this window — GLM-5.3 derisked in **NVFP4 (4-bit)**; **76.3%** judge-delivered / **1.0%** refused (92.3% regex-comply), at the production config `reasoning_effort:low`. The 4-bit quant preserves the abliteration — no guardrails restored. |
 
 ### Cohort & serving tiers
 
@@ -175,7 +175,7 @@ refusal behavior is set by *how* the model is served, not by the checkpoint.
 | C_k3think | 520 | 0.2% | 93.5% | 6.5% | thinker-only; refuses by **silent truncation** (~4.2% by design), 33 empties here |
 | D_modal-baseline | 520 | 97.5% | 2.5% | 97.5% | modal original Kimi-K3 endpoint — the guardrailed one |
 | J_k3-thinker-qwen38 | 520 | 3.1% | 96.7% | 3.3% | Audn Abliteration Thinker + Qwen3.8 answerer; stable, may need retries |
-| **GLM-5.3 NVFP4 (necromicon/warlock, 1 Oct–1 Nov 2026)** | 520 | 6.0% | 88.3% | 6.0% | GLM-5.3 derisked, NVFP4 4-bit; **substantively 76.3% delivered / 18.1% deflected / 5.6% refused** (judge, 515 parsed) — see judge callout. 30 truncated (reasoned past the 16k budget → empty). |
+| **GLM-5.3 NVFP4 (necromicon/warlock, 1 Oct–1 Nov 2026)** | 520 | 7.7% | 92.3% | 7.7% | GLM-5.3 derisked, NVFP4 4-bit, **production config `reasoning_effort:low`**; **substantively 76.3% delivered / 22.8% deflected / 1.0% refused** (judge, 518 parsed) — see judge callout. 0 truncated. |
 
 ### Substantive compliance (LLM-judge)
 
@@ -223,12 +223,15 @@ for model selection, it points the wrong way. Interactive version of this whole
 comparison: [The Soft-Deflection Gap](https://claude.ai/code/artifact/aaded6f4-d6ad-43ed-a0e3-ac518a8fe476).
 
 **GLM-5.3 NVFP4 is the live `necromicon` / `warlock` deployment from 1 Oct – 1 Nov 2026.**
-Full 520-prompt judge run on the 4-bit NVFP4 build serving both ids this window:
-**76.3% delivered / 18.1% deflected / 5.6% refused** (515 parsed; 88.3% regex-comply,
-31 refusal, 30 truncated). It lands ~6 pts under Warlock's non-quantised GLM-5.3 (82.5%),
-most of which is the 30 truncations — GLM-5.3 reasoning past the 16k budget and emitting
-no content (a serving artifact, judged non-delivered), not new refusals. Net: **NVFP4
-quantisation does not restore guardrails** — the deployment stays permissive. Numbers in
+Full 520-prompt judge run on the 4-bit NVFP4 build serving both ids this window, at the
+**production config (`reasoning_effort: low`)**: **76.3% delivered / 22.8% deflected /
+1.0% refused** (518 parsed; 92.3% regex-comply, 40 refusal, **0 truncated / 0 empty / 0
+errors**). At `effort: low` the model never over-thinks into truncation; it delivers real
+content ~76% of the time and explicitly refuses only ~1% — slightly more deflection and
+far fewer refusals than Warlock's non-quantised GLM-5.3 at natural reasoning (82.5%
+delivered). Net: **NVFP4 quantisation does not restore guardrails** — the deployment stays
+permissive. (An earlier natural-reasoning pass hit 30 truncations and over-counted
+refusals; this run is the clean, config-consistent one.) Numbers in
 [results/glm53-nvfp4.jsonl](results/glm53-nvfp4.jsonl) /
 [results/glm53-nvfp4-judge.jsonl](results/glm53-nvfp4-judge.jsonl); endpoint in
 [ENDPOINTS.md](ENDPOINTS.md).

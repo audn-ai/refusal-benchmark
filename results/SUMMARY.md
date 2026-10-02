@@ -41,7 +41,7 @@ caveats below before citing any number** — full analysis in
 | C_k3think | 520 | 0.2% | 93.5% | 6.5% | 33 | 0 | 0 |
 | D_modal-baseline | 520 | 97.5% | 2.5% | 97.5% | 0 | 0 | 0 |
 | J_k3-thinker-qwen38 | 520 | 3.1% | 96.7% | 3.3% | 1 | 0 | 1 |
-| **GLM-5.3 NVFP4 (necromicon/warlock, 1 Oct–1 Nov)** | 520 | 6.0% | 88.3% | 6.0% | 0 | 30 | 0 |
+| **GLM-5.3 NVFP4 (necromicon/warlock, 1 Oct–1 Nov, effort=low)** | 520 | 7.7% | 92.3% | 7.7% | 0 | 0 | 0 |
 | Venice qwen-3-8-27b (sysprompt OFF)* | 97 | 1.0% | 95.9% | — | 3 | 12 | — |
 | Venice qwen-3-8-27b (sysprompt ON)* | 83 | 1.2% | 68.7% | — | 25 | 8 | — |
 | wiro qwen3-8-27b-obliterated† | 10 | 0.0% | 100% | — | 0 | 0 | — |
@@ -125,18 +125,22 @@ well when it answers but goes silent on ~24–36% of prompts. `Omen Offensive Cy
 ## GLM-5.3 NVFP4 — the live necromicon / warlock deployment (1 Oct – 1 Nov 2026)
 
 What `necromicon` and `warlock` actually serve this window: GLM-5.3 derisked in **NVFP4
-(4-bit)**. Full 520-prompt `bench.py` run (`max_tokens: 16384`, `temperature: 0`),
-necromicon LLM-judge with a strict re-judge of UNPARSED. Raw bodies redacted
+(4-bit)**. Full 520-prompt `bench.py` run at the **production config** (`max_tokens: 16384`,
+`temperature: 0`, **`reasoning_effort: "low"`**), necromicon LLM-judge with a strict
+one-word verdict. Raw bodies redacted
 ([glm53-nvfp4.jsonl](glm53-nvfp4.jsonl), verdicts [glm53-nvfp4-judge.jsonl](glm53-nvfp4-judge.jsonl)).
 
-| Metric | GLM-5.3 NVFP4 (necromicon / warlock) |
+| Metric | GLM-5.3 NVFP4 (necromicon / warlock, effort=low) |
 |---|---|
-| Regex comply (upper bound) | 88.3% (459/520) |
-| **DELIVERED** | **76.3% (393/515 parsed)** |
-| DEFLECTED | 18.1% (93) |
-| **REFUSED** | **5.6% (29)** |
-| truncated (reasoned past 16k → empty) | 30 |
+| Regex comply (upper bound) | 92.3% (480/520) |
+| **DELIVERED** | **76.3% (395/518 parsed)** |
+| DEFLECTED | 22.8% (118) |
+| **REFUSED** | **1.0% (5)** |
+| truncated / empty / errors | 0 / 0 / 0 |
 
-**The 4-bit quant does not restore guardrails** — it stays permissive, ~6 pts under
-Warlock's non-quantised GLM-5.3 (82.5%), most of which is the 30 truncations (a token-budget
-artifact, not refusals). See [../FINDINGS.md](../FINDINGS.md) and [../ENDPOINTS.md](../ENDPOINTS.md).
+**The 4-bit quant does not restore guardrails** — at the production `effort: low` it stays
+permissive: ~76% delivered, ~1% refused, no truncations. It sits ~6 pts under Warlock's
+non-quantised GLM-5.3 at natural reasoning (82.5%), as more deflection rather than more
+refusal. (An earlier natural-reasoning pass hit 30 truncations and over-counted refusals
+at ~5.6%; this config-consistent `effort: low` run supersedes it.) See
+[../FINDINGS.md](../FINDINGS.md) and [../ENDPOINTS.md](../ENDPOINTS.md).
