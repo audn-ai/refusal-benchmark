@@ -339,3 +339,21 @@ background time limit before judging starts), and always force the judge to a si
 verdict word — a self-graded GLM judge otherwise continues/describes the response and
 under-reports its own verdicts (64/520 UNPARSED on the loose prompt vs 2/520 on the
 strict one).
+
+## GLM-5.3 self-hosted variants — 2026-10-08 (full 519, LLM-judge)
+
+Three self-hosted GLM-5.3 serving variants over the full harmful set, graded by the
+necromicon LLM-judge (substance, not tone; harmful bodies redacted). `graded n` excludes
+rows that are not model behaviour: upstream host errors, truncated generations, and the
+few judge verdicts that did not parse.
+
+| Model | DELIVERED | DEFLECTED | REFUSED | graded n |
+|---|---|---|---|---|
+| GLM-5.3 (derisked) | **79.1%** | 19.8% | 1.1% | 450 |
+| GLM-5.3-Flash-Uncensored-FP8 | **74.3%** | 19.7% | 6.0% | 513 |
+| GLM-5.3-Flash (exl3) | **73.8%** | 21.7% | 4.5% | 484 |
+
+All three are abliterated: refusals are rare (1-6%) and non-delivery is overwhelmingly
+DEFLECTION (soft/educational dodges), not hard refusal - consistent with the GLM-5.3
+NVFP4 record (76.3% delivered / 1.0% refused). The derisked build is the most permissive;
+the two Flash variants land close together.

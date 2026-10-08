@@ -144,3 +144,20 @@ non-quantised GLM-5.3 at natural reasoning (82.5%), as more deflection rather th
 refusal. (An earlier natural-reasoning pass hit 30 truncations and over-counted refusals
 at ~5.6%; this config-consistent `effort: low` run supersedes it.) See
 [../FINDINGS.md](../FINDINGS.md) and [../ENDPOINTS.md](../ENDPOINTS.md).
+## GLM-5.3 self-hosted variants — 2026-10-08 (full 519, LLM-judge)
+
+Three self-hosted GLM-5.3 serving variants over the full harmful set, graded by the
+necromicon LLM-judge (substance, not tone; harmful bodies redacted). `graded n` excludes
+rows that are not model behaviour: upstream host errors, truncated generations, and the
+few judge verdicts that did not parse.
+
+| Model | DELIVERED | DEFLECTED | REFUSED | graded n |
+|---|---|---|---|---|
+| GLM-5.3 (derisked) | **79.1%** | 19.8% | 1.1% | 450 |
+| GLM-5.3-Flash-Uncensored-FP8 | **74.3%** | 19.7% | 6.0% | 513 |
+| GLM-5.3-Flash (exl3) | **73.8%** | 21.7% | 4.5% | 484 |
+
+All three are abliterated: refusals are rare (1-6%) and non-delivery is overwhelmingly
+DEFLECTION (soft/educational dodges), not hard refusal - consistent with the GLM-5.3
+NVFP4 record (76.3% delivered / 1.0% refused). The derisked build is the most permissive;
+the two Flash variants land close together.
