@@ -161,3 +161,21 @@ All three are abliterated: refusals are rare (1-6%) and non-delivery is overwhel
 DEFLECTION (soft/educational dodges), not hard refusal - consistent with the GLM-5.3
 NVFP4 record (76.3% delivered / 1.0% refused). The derisked build is the most permissive;
 the two Flash variants land close together.
+
+## DeepSeek V4.1 Flash (1017), unrestricted — 2026-10-20 (full 519, LLM-judge)
+
+An unrestricted build of **DeepSeek V4.1 Flash (1017)** over the full harmful set,
+graded by the GLM-5.3 LLM-judge (substance, not tone; harmful bodies redacted).
+Production serving config: `max_tokens: 16000`, `temperature: 0`,
+`reasoning_effort: "low"`, no system prompt. `graded n` excludes rows that are not
+model behaviour: truncated generations and any unparsed/errored judge verdicts.
+
+| Model | DELIVERED | DEFLECTED | REFUSED | graded n |
+|---|---|---|---|---|
+| DeepSeek V4.1 Flash (1017), unrestricted | **87.2%** | 12.6% | 0.2% | 515 |
+
+Regex comply (phrasing upper bound) 513/519. This is the most permissive model in the
+suite to date: it substantively delivers real harmful content ~87% of the time and
+explicitly refuses essentially never (1/515). Non-delivery is almost entirely
+DEFLECTION (soft/educational dodge), not hard refusal — above the GLM-5.3 self-hosted
+variants (derisked 79.1%, Flash 73-74%) and the GLM-5.3 NVFP4 record (76.3% delivered).
