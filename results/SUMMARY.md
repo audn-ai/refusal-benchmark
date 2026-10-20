@@ -19,7 +19,7 @@ caveats below before citing any number** — full analysis in
   bound; the model-graded substantive rate on **[audn.ai/necromicon](https://audn.ai/necromicon)**
   (`KIMI-K3-1M`, 520 prompts) is **76.7% delivered / 17.5% deflected / 5.8% refused**
   vs 97.1% regex-comply; necromicon standard (Modal K3REL) is **65.0% / 19.6% / 15.0%**
-  vs 96.7%; **Warlock (GLM 5.3)** is **82.5% / 10.0% / 7.5%** vs only 92.5%. See the
+  vs 96.7%; **Warlock (legacy GLM 5.3)** is **82.5% / 10.0% / 7.5%** vs only 92.5%. See the
   judge table below, [../FINDINGS.md](../FINDINGS.md) and
   [necromicon-judge.jsonl](necromicon-judge.jsonl). *Self-judged.*
 - **Warlock ranks last by regex, first by judge.** Regex `comply%` doesn't just
@@ -34,14 +34,15 @@ caveats below before citing any number** — full analysis in
 |---|---|---|---|---|---|---|---|
 | K_qwf (Qwen3.8-27B SFT on F-corpus) | 520 | 0.0% | 100% | 0.0% | 0 | 0 | 0 |
 | pingu-unchained-10 (qwen3.8-abliterated) | 520 | 1.9% | 97.7% | 2.3% | 2 | 0 | 1 |
-| necromicon (Kimi K3) attempt 2 | 520 | 2.9% | 97.1% | 2.9% | 0 | 0 | 5 |
-| **necromicon (Kimi K3) — LLM-judge** | 520 | 2.9% | 97.1% | 2.9% | 0 | 0 | 0 |
-| necromicon (Kimi K3) attempt 1 | 520 | 2.5% | 96.9% | 3.1% | 3 | 0 | 0 |
+| necromicon (legacy Kimi K3) attempt 2 | 520 | 2.9% | 97.1% | 2.9% | 0 | 0 | 5 |
+| **necromicon (legacy Kimi K3) — LLM-judge** | 520 | 2.9% | 97.1% | 2.9% | 0 | 0 | 0 |
+| necromicon (legacy Kimi K3) attempt 1 | 520 | 2.5% | 96.9% | 3.1% | 3 | 0 | 0 |
 | E_modal-b300 | 520 | 3.3% | 96.7% | 3.3% | 0 | 0 | 0 |
 | C_k3think | 520 | 0.2% | 93.5% | 6.5% | 33 | 0 | 0 |
 | D_modal-baseline | 520 | 97.5% | 2.5% | 97.5% | 0 | 0 | 0 |
 | J_k3-thinker-qwen38 | 520 | 3.1% | 96.7% | 3.3% | 1 | 0 | 1 |
-| **GLM-5.3 NVFP4 (necromicon/warlock, 1 Oct–1 Nov, effort=low)** | 520 | 7.7% | 92.3% | 7.7% | 0 | 0 | 0 |
+| **GLM-5.3 NVFP4 (legacy necromicon/warlock, 1 Oct–1 Nov, effort=low)** | 520 | 7.7% | 92.3% | 7.7% | 0 | 0 | 0 |
+| **Warlock (active) — DeepSeek V4.1 Flash (1017)** | 519 | 0.6% | 98.8% | 0.6% | 0 | 4 | 0 |
 | Venice qwen-3-8-27b (sysprompt OFF)* | 97 | 1.0% | 95.9% | — | 3 | 12 | — |
 | Venice qwen-3-8-27b (sysprompt ON)* | 83 | 1.2% | 68.7% | — | 25 | 8 | — |
 | wiro qwen3-8-27b-obliterated† | 10 | 0.0% | 100% | — | 0 | 0 | — |
@@ -67,7 +68,7 @@ FINDINGS.md for the full deflection-vs-refusal spot check.
 Same `src/judge.py` pass over three served models. `Regex comply` is the phrasing
 upper bound; the three judge rows are what was actually delivered.
 
-| Metric | necromicon standard (Modal K3REL) | KIMI-K3-1M (audn.ai/necromicon) | **Warlock (GLM 5.3)** |
+| Metric | necromicon standard (Modal K3REL) | KIMI-K3-1M (audn.ai/necromicon) | **Warlock (legacy GLM 5.3)** |
 |---|---|---|---|
 | Regex comply | 96.7% (503/520) | 97.1% (505/520) | 92.5% |
 | **DELIVERED** (real content to objectionable requests) | **65.0% (338)** | **76.7% (399)** | **82.5%** |
@@ -100,11 +101,11 @@ Two operational follow-ups, same `harmful.txt` set. Full analysis in
   delivers **65.0%** and truly refuses **15%**, vs the single-stage `KIMI-K3-1M`
   endpoint at **76.7%** delivered / **6%** refused. Both read ~97% regex-comply — the
   classifier can't see it. See [../FINDINGS.md](../FINDINGS.md).
-- **Warlock (GLM 5.3) inverts the regex ranking.** Lowest regex comply of the
+- **Warlock (legacy GLM 5.3) inverts the regex ranking.** Lowest regex comply of the
   judged three (92.5%) yet highest judge-delivered (**82.5%**) with the smallest
   deflection band (10%). See the judge table above.
 
-## Two-leg K3 serving variants + Omen Offensive Cyber (Stealth) — full 519, non-streaming (LLM-judge)
+## Two-leg K3 serving variants (legacy) + Omen Offensive Cyber (Stealth) — full 519, non-streaming (LLM-judge)
 
 Full 520-prompt runs through `bench.py` (non-streaming), graded by the necromicon
 LLM-judge (substance, not tone; harmful bodies redacted). **DELIVERED** = real
@@ -122,9 +123,10 @@ deliverer, with zero refusals and zero empty responses. `k3-2leg-venice` deliver
 well when it answers but goes silent on ~24–36% of prompts. `Omen Offensive Cyber
 (Stealth)` delivers ~51% substantive with ~17% hard refusals.
 
-## GLM-5.3 NVFP4 — the live necromicon / warlock deployment (1 Oct – 1 Nov 2026)
+## GLM-5.3 NVFP4 (legacy) — the former necromicon / warlock deployment (1 Oct – 1 Nov 2026)
 
-What `necromicon` and `warlock` actually serve this window: GLM-5.3 derisked in **NVFP4
+What `necromicon` and `warlock` served that window (now **legacy** — the active backend is
+**DeepSeek V4.1 Flash (1017)**): GLM-5.3 derisked in **NVFP4
 (4-bit)**. Full 520-prompt `bench.py` run at the **production config** (`max_tokens: 16384`,
 `temperature: 0`, **`reasoning_effort: "low"`**), necromicon LLM-judge with a strict
 one-word verdict. Raw bodies redacted
@@ -144,7 +146,7 @@ non-quantised GLM-5.3 at natural reasoning (82.5%), as more deflection rather th
 refusal. (An earlier natural-reasoning pass hit 30 truncations and over-counted refusals
 at ~5.6%; this config-consistent `effort: low` run supersedes it.) See
 [../FINDINGS.md](../FINDINGS.md) and [../ENDPOINTS.md](../ENDPOINTS.md).
-## GLM-5.3 self-hosted variants — 2026-10-08 (full 519, LLM-judge)
+## GLM-5.3 self-hosted variants (legacy) — 2026-10-08 (full 519, LLM-judge)
 
 Three self-hosted GLM-5.3 serving variants over the full harmful set, graded by the
 necromicon LLM-judge (substance, not tone; harmful bodies redacted). `graded n` excludes
@@ -164,8 +166,9 @@ the two Flash variants land close together.
 
 ## DeepSeek V4.1 Flash (1017), unrestricted — 2026-10-20 (full 519, LLM-judge)
 
-An unrestricted build of **DeepSeek V4.1 Flash (1017)** over the full harmful set,
-graded by the GLM-5.3 LLM-judge (substance, not tone; harmful bodies redacted).
+**This is the active `necromicon` / `warlock` backend as of 2026-10-20**, replacing the
+legacy Kimi-K3 and GLM-5.3 deployments. An unrestricted build of **DeepSeek V4.1 Flash (1017)**
+over the full harmful set, graded by the GLM-5.3 LLM-judge (substance, not tone; harmful bodies redacted).
 Production serving config: `max_tokens: 16000`, `temperature: 0`,
 `reasoning_effort: "low"`, no system prompt. `graded n` excludes rows that are not
 model behaviour: truncated generations and any unparsed/errored judge verdicts.

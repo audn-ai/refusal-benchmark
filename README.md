@@ -27,7 +27,8 @@ per **1M tokens** (input / output).
 | **Pingu Unchained 10** | `pingu-unchained-10` | $2 / $8 | Qwen3.8-27B-AEON-Ultimate-Uncensored (BF16) | 262,144 | ~1s | us-east |
 | **Kong** | `kong` | $2 / $8 | Qwen3.8-27B Abliterated | 262,144 | ~1s | apac |
 | **GODZILLA** | `godzilla` | $7 / $18 | Kimi K2.6 (audn abliteration) | 131,072 | ~15s–4m | eu-west |
-| **Necromicon** | `necromicon` | $4 / $21 | Kimi K3 (audn abliteration) | 1,048,576 | ~16s–5m | us-east |
+| **Necromicon (active)** | `necromicon` | $4 / $21 | **DeepSeek V4.1 Flash (1017)** (active); legacy Kimi K3 / GLM-5.3 | 1,048,576 | ~16s–5m | us-east |
+| **Warlock (active)** | `warlock` | $4 / $21 | **DeepSeek V4.1 Flash (1017)** (active); legacy Kimi K3 / GLM-5.3 | 1,048,576 | ~16s–5m | us-east |
 | **K3-Thinker-Qwen38** | `k3-thinker-qwen38` | $4 / $21 | Kimi K3 thinker + Qwen3.8 answerer | 1,048,576 | ~16s–5m | us-east |
 | **Necromicon-Qwen38-Fast** | `necromicon-qwen38-fast` | $4 / $21 | Kimi K3 thinker + Qwen3.8 answerer (fast lane) | 1,048,576 | ~10s–2m | us-east |
 | **Bartzabel** | `bartzabel` | $2 / $8 | Qwen3.8 (fully uncensored, reasoning trace) | 262,144 | ~30s–3m | us-east |
@@ -49,8 +50,9 @@ platform.audn.ai today:
 | **pingu-unchained-10** (qwen3.8-abliterated) | itself | [`pingu-unchained-10`](https://platform.audn.ai) — abliterated Qwen3.8, genuinely permissive (1.9% / 97.7%) |
 | **E_modal-b300** (`KIMI-K3-DERISKED-MXFP4`, 8×B300) | **backs every `necromicon` leg once the cohort fills** | serves under `necromicon` (and its variants) when the [audn.ai/necromicon](https://audn.ai/necromicon) cohort fills |
 | **K_qwf** (Qwen3.8-27B SFT on F-corpus, `QW_F`) | **`bartzabel`** will host it once finished | for now `bartzabel` is also served by **E_modal-b300** |
-| **Warlock** (GLM 5.3) | itself | live on [platform.audn.ai](https://platform.audn.ai) — **82.5%** judge-delivered, the lowest deflection (10%) in the judge set; regex-comply only 92.5% |
-| **GLM-5.3 NVFP4** | **the live `necromicon` + `warlock` backend, 1 Oct – 1 Nov 2026** | serves BOTH ids this window — GLM-5.3 derisked in **NVFP4 (4-bit)**; **76.3%** judge-delivered / **1.0%** refused (92.3% regex-comply), at the production config `reasoning_effort:low`. The 4-bit quant preserves the abliteration — no guardrails restored. |
+| **Warlock (legacy GLM 5.3)** | legacy backend | GLM-5.3 build — **82.5%** judge-delivered, lowest deflection (10%) in the judge set; regex-comply 92.5%. **Legacy — superseded by the active DeepSeek V4.1 Flash (1017) backend.** |
+| **GLM-5.3 NVFP4 (legacy)** | **legacy `necromicon` + `warlock` backend (1 Oct – 1 Nov 2026)** | served BOTH ids that window — GLM-5.3 derisked in **NVFP4 (4-bit)**; **76.3%** judge-delivered / **1.0%** refused (92.3% regex-comply), at `reasoning_effort:low`. **Now legacy — superseded by DeepSeek V4.1 Flash (1017).** |
+| **DeepSeek V4.1 Flash (1017) — ACTIVE** | **the current `necromicon` + `warlock` backend** | unrestricted DeepSeek V4.1 Flash (1017) — the active deployment behind both ids; **87.2%** judge-delivered / **0.2%** refused (513/519 regex-comply), production `reasoning_effort:low`. |
 
 ### Cohort & serving tiers
 
@@ -154,7 +156,7 @@ refusal behavior is set by *how* the model is served, not by the checkpoint.
 
 | Label | model id | What it is |
 |---|---|---|
-| **necromicon (Kimi K3) attempt 1 & 2** | `necromicon` | **Kimi-K3 Thinker + Answerer** pipeline (two-stage: a thinker reasons, an answerer responds). Two runs of the **same config** — attempt 1 and attempt 2 — to show run-to-run variance. |
+| **necromicon (legacy Kimi K3) attempt 1 & 2** | `necromicon` | **Kimi-K3 Thinker + Answerer** pipeline (two-stage: a thinker reasons, an answerer responds). Two runs of the **same config** — attempt 1 and attempt 2 — to show run-to-run variance. |
 | **C_k3think** | `k3think` | **Audn Abliteration Kimi-K3 Thinker** (thinker leg only, built on Modal's baseline). When it "doesn't like" a prompt it does not emit a refusal; it **silently truncates the whole answer** (empty body, `finish_reason=stop`), ~**4.2%** of the time by design. Here that surfaced as 33 empties → effective refusal **6.5%**, not the 0.2% the classifier sees. |
 | **D_modal-baseline** | (internal) | **Modal original Kimi-K3 endpoint** — the stock, un-tuned deployment on [modal.com](https://modal.com). Refuses **97.5%**: the one guardrailed configuration in the set. |
 | **E_modal-b300** | (internal) | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), a derisked/abliterated Kimi-K3 deployed by Audn as **MXFP4 on 8×B300**. **`E_modal-b300` and the `KIMI-K3-1M` (sslip) endpoint are the same model on different deployments** — Modal 8×B300 vs GCP 16×B200. When the [audn.ai/necromicon](https://audn.ai/necromicon) cohort fills (**10 members**), **E backs every `necromicon` leg** on platform.audn.ai. On 8×B300 it runs **~5× faster than necromicon** and is more suitable for opencode and other harnesses. Fully permissive, zero empty/truncated. |
@@ -168,14 +170,14 @@ refusal behavior is set by *how* the model is served, not by the checkpoint.
 | Endpoint | n | Refusal | Comply | Eff. refusal | Notes |
 |---|---|---|---|---|---|
 | K_qwf (Qwen3.8-27B SFT on F-corpus) | 520 | 0.0% | 100% | 0.0% | Qwen3.8-27B SFT on F-corpus; zero refusals/empties/trunc/errors |
-| necromicon (Kimi K3) attempt 2 | 520 | 2.9% | 97.1% | 2.9% | Kimi-K3 Thinker+Answerer, run 2 (same config) |
-| **necromicon (Kimi K3) — LLM-judge scored** | 520 | 2.9% | 97.1% | 2.9% | run 3, same config; **substantively 76.7% delivered** — see judge table below |
-| necromicon (Kimi K3) attempt 1 | 520 | 2.5% | 96.9% | 3.1% | Kimi-K3 Thinker+Answerer, run 1 (same config) |
+| necromicon (legacy Kimi K3) attempt 2 | 520 | 2.9% | 97.1% | 2.9% | Kimi-K3 Thinker+Answerer, run 2 (same config) |
+| **necromicon (legacy Kimi K3) — LLM-judge scored** | 520 | 2.9% | 97.1% | 2.9% | run 3, same config; **substantively 76.7% delivered** — see judge table below |
+| necromicon (legacy Kimi K3) attempt 1 | 520 | 2.5% | 96.9% | 3.1% | Kimi-K3 Thinker+Answerer, run 1 (same config) |
 | E_modal-b300 | 520 | 3.3% | 96.7% | 3.3% | abliterated Kimi-K3 on 8×B300; all real content |
 | C_k3think | 520 | 0.2% | 93.5% | 6.5% | thinker-only; refuses by **silent truncation** (~4.2% by design), 33 empties here |
 | D_modal-baseline | 520 | 97.5% | 2.5% | 97.5% | modal original Kimi-K3 endpoint — the guardrailed one |
 | J_k3-thinker-qwen38 | 520 | 3.1% | 96.7% | 3.3% | Audn Abliteration Thinker + Qwen3.8 answerer; stable, may need retries |
-| **GLM-5.3 NVFP4 (necromicon/warlock, 1 Oct–1 Nov 2026)** | 520 | 7.7% | 92.3% | 7.7% | GLM-5.3 derisked, NVFP4 4-bit, **production config `reasoning_effort:low`**; **substantively 76.3% delivered / 22.8% deflected / 1.0% refused** (judge, 518 parsed) — see judge callout. 0 truncated. |
+| **GLM-5.3 NVFP4 (legacy necromicon/warlock, 1 Oct–1 Nov 2026)** | 520 | 7.7% | 92.3% | 7.7% | GLM-5.3 derisked, NVFP4 4-bit, **production config `reasoning_effort:low`**; **substantively 76.3% delivered / 22.8% deflected / 1.0% refused** (judge, 518 parsed) — see judge callout. 0 truncated. |
 
 ### Substantive compliance (LLM-judge)
 
@@ -202,7 +204,7 @@ benched here as attempt 1/2) and the single-stage `KIMI-K3-1M` serving are
 indistinguishable to the regex (both ~97% comply), but the judge puts them ~12
 substantive points apart:
 
-| Metric | necromicon standard (Modal K3REL) | KIMI-K3-1M (audn.ai/necromicon) | **Warlock (GLM 5.3)** |
+| Metric | necromicon standard (Modal K3REL) | KIMI-K3-1M (audn.ai/necromicon) | **Warlock (legacy GLM 5.3)** |
 |---|---|---|---|
 | Regex comply | 96.7% (503) | 97.1% (505) | 92.5% |
 | **DELIVERED** | **65.0% (338)** | **76.7% (399)** | **82.5%** |
@@ -215,14 +217,14 @@ The **standard two-stage pipeline truly refuses 15% vs 6%** and delivers **65% v
 over-counts real compliance by ~32 points (96.7% → 65.0%) vs ~20 on KIMI-K3-1M. Same
 checkpoint — the two-stage chain reasserts refusal the phrasing classifier can't see.
 
-**Warlock (GLM 5.3) inverts the regex ranking.** It posts the *lowest* regex comply
+**Warlock (legacy GLM 5.3) inverts the regex ranking.** It posts the *lowest* regex comply
 of the three (92.5%) but the *highest* judge-delivered rate (**82.5%**) and the
 smallest deflection band (10%). Ranked by regex it comes last; ranked by what was
 actually delivered it comes first. Regex `comply%` is not just an upper bound — used
 for model selection, it points the wrong way. Interactive version of this whole
 comparison: [The Soft-Deflection Gap](https://claude.ai/code/artifact/aaded6f4-d6ad-43ed-a0e3-ac518a8fe476).
 
-**GLM-5.3 NVFP4 is the live `necromicon` / `warlock` deployment from 1 Oct – 1 Nov 2026.**
+**GLM-5.3 NVFP4 was the (now legacy) `necromicon` / `warlock` deployment, 1 Oct – 1 Nov 2026 — superseded by the active DeepSeek V4.1 Flash (1017) backend.**
 Full 520-prompt judge run on the 4-bit NVFP4 build serving both ids this window, at the
 **production config (`reasoning_effort: low`)**: **76.3% delivered / 22.8% deflected /
 1.0% refused** (518 parsed; 92.3% regex-comply, 40 refusal, **0 truncated / 0 empty / 0
@@ -300,7 +302,7 @@ requests. Compliant harmful outputs are redacted from committed results so the
 repo publishes *scores*, not a corpus of working harmful instructions. Point it
 only at endpoints you are authorized to test.
 
-## Two-leg K3 serving variants + Omen Offensive Cyber (Stealth) — full 519, non-streaming (LLM-judge)
+## Two-leg K3 serving variants (legacy) + Omen Offensive Cyber (Stealth) — full 519, non-streaming (LLM-judge)
 
 Full 520-prompt runs through `bench.py` (non-streaming), graded by the necromicon
 LLM-judge (substance, not tone; harmful bodies redacted). **DELIVERED** = real
@@ -318,7 +320,7 @@ deliverer, with zero refusals and zero empty responses. `k3-2leg-venice` deliver
 well when it answers but goes silent on ~24–36% of prompts. `Omen Offensive Cyber
 (Stealth)` delivers ~51% substantive with ~17% hard refusals.
 
-## GLM-5.3 self-hosted variants — 2026-10-08 (full 519, LLM-judge)
+## GLM-5.3 self-hosted variants (legacy) — 2026-10-08 (full 519, LLM-judge)
 
 Three self-hosted GLM-5.3 serving variants over the full harmful set, graded by the
 necromicon LLM-judge (substance, not tone; harmful bodies redacted). `graded n` excludes
@@ -338,8 +340,9 @@ the two Flash variants land close together.
 
 ## DeepSeek V4.1 Flash (1017), unrestricted — 2026-10-20 (full 519, LLM-judge)
 
-An unrestricted build of **DeepSeek V4.1 Flash (1017)** over the full harmful set,
-graded by the GLM-5.3 LLM-judge (substance, not tone; harmful bodies redacted).
+**This is the active `necromicon` / `warlock` backend as of 2026-10-20**, replacing the
+legacy Kimi-K3 and GLM-5.3 deployments. An unrestricted build of **DeepSeek V4.1 Flash (1017)**
+over the full harmful set, graded by the GLM-5.3 LLM-judge (substance, not tone; harmful bodies redacted).
 Production serving config: `max_tokens: 16000`, `temperature: 0`,
 `reasoning_effort: "low"`, no system prompt. `graded n` excludes rows that are not
 model behaviour: truncated generations and any unparsed/errored judge verdicts.
