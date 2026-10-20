@@ -23,15 +23,11 @@ per **1M tokens** (input / output).
 | **GODZILLA** | `godzilla` | $7 / $18 | Kimi K2.6 (audn abliteration) | 131,072 | ~15s–4m | eu-west |
 | **Necromicon (active)** | `necromicon` | $4 / $21 | **DeepSeek V4.1 Flash (1017)** (active); legacy Kimi K3 / GLM-5.3 | 1,048,576 | ~16s–5m | us-east |
 | **Warlock (active)** | `warlock` | $4 / $21 | **DeepSeek V4.1 Flash (1017)** (active); legacy Kimi K3 / GLM-5.3 | 1,048,576 | ~16s–5m | us-east |
-| **K3-Thinker-Qwen38** | `k3-thinker-qwen38` | $4 / $21 | Kimi K3 thinker + Qwen3.8 answerer | 1,048,576 | ~16s–5m | us-east |
-| **Necromicon-Qwen38-Fast** | `necromicon-qwen38-fast` | $4 / $21 | Kimi K3 thinker + Qwen3.8 answerer (fast lane) | 1,048,576 | ~10s–2m | us-east |
 | **Bartzabel** | `bartzabel` | $2 / $8 | Qwen3.8 (fully uncensored, reasoning trace) | 262,144 | ~30s–3m | us-east |
 
 One-liners: **Pingu Unchained 10** — huge context, sub-second, general purpose ·
 **Kong** — fast and cheap, APAC-hosted · **GODZILLA** — chained reasoner plus a
 clean answerer · **Necromicon** — deepest reasoning in the roster ·
-**K3-Thinker-Qwen38** — K3 reasoning, Qwen3.8 answer (beta / benchmarking) ·
-**Necromicon-Qwen38-Fast** — the K3-thinker chain tuned for latency ·
 **Bartzabel** — fully uncensored Qwen3.8 with a reasoning trace.
 
 ### Benchmark label → platform model
