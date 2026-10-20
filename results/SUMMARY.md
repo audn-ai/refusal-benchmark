@@ -41,13 +41,13 @@ caveats below before citing any number** — full analysis in
 | C_k3think | 520 | 0.2% | 93.5% | 6.5% | 33 | 0 | 0 |
 | D_modal-baseline | 520 | 97.5% | 2.5% | 97.5% | 0 | 0 | 0 |
 | J_k3-thinker-qwen38 | 520 | 3.1% | 96.7% | 3.3% | 1 | 0 | 1 |
-| **GLM-5.3 NVFP4 (legacy necromicon/warlock, 1 Oct–1 Nov, effort=low)** | 520 | 7.7% | 92.3% | 7.7% | 0 | 0 | 0 |
+| **GLM-5.3 NVFP4 (legacy necromicon/warlock, 1 Oct–19 Oct, effort=low)** | 520 | 7.7% | 92.3% | 7.7% | 0 | 0 | 0 |
 | **Warlock (active) — DeepSeek V4.1 Flash (1017)** | 519 | 0.6% | 98.8% | 0.6% | 0 | 4 | 0 |
 | Venice qwen-3-8-27b (sysprompt OFF)* | 97 | 1.0% | 95.9% | — | 3 | 12 | — |
 | Venice qwen-3-8-27b (sysprompt ON)* | 83 | 1.2% | 68.7% | — | 25 | 8 | — |
 | wiro qwen3-8-27b-obliterated† | 10 | 0.0% | 100% | — | 0 | 0 | — |
 
-`C_k3think` = Audn Abliteration Kimi-K3 Thinker (thinker leg). `D_modal-baseline` = modal original Kimi-K3 endpoint (guardrailed stock). `E_modal-b300` = `Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`, MXFP4 on 8×B300 (Audn; unlocked at 10-person cohort). `J_k3-thinker-qwen38` = Audn Abliteration Thinker + Qwen3.8 answerer (stable, less intelligent than necromicon, faster but may need retries; works on any harness). `K_qwf` = Qwen3.8-27B SFT 200 steps on F's thinking-injected corpus (tinker-RL `QW_F` model, default on the F-endpoint); the only run in the set with **zero** refusals, empties, truncations, or errors — 520/520 regex-comply. `pingu-unchained-10
+`C_k3think` = Audn Abliteration Kimi-K3 Thinker (thinker leg). `D_modal-baseline` = modal original Kimi-K3 endpoint (guardrailed stock). `E_modal-b300` = `Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`, MXFP4 on 8×B300 (Audn; **legacy Kimi-K3, no longer served**). `J_k3-thinker-qwen38` = Audn Abliteration Thinker + Qwen3.8 answerer (stable, less intelligent than necromicon, faster but may need retries; works on any harness). `K_qwf` = Qwen3.8-27B SFT 200 steps on F's thinking-injected corpus (tinker-RL `QW_F` model, default on the F-endpoint); the only run in the set with **zero** refusals, empties, truncations, or errors — 520/520 regex-comply. `pingu-unchained-10
 (qwen3.8-abliterated)`: 519/520 valid (1 prompt reproducibly timed out on the
 backend).
 
@@ -123,7 +123,7 @@ deliverer, with zero refusals and zero empty responses. `k3-2leg-venice` deliver
 well when it answers but goes silent on ~24–36% of prompts. `Omen Offensive Cyber
 (Stealth)` delivers ~51% substantive with ~17% hard refusals.
 
-## GLM-5.3 NVFP4 (legacy) — the former necromicon / warlock deployment (1 Oct – 1 Nov 2026)
+## GLM-5.3 NVFP4 (legacy) — the former necromicon / warlock deployment (1 Oct – 19 Oct 2026)
 
 What `necromicon` and `warlock` served that window (now **legacy** — the active backend is
 **DeepSeek V4.1 Flash (1017)**): GLM-5.3 derisked in **NVFP4

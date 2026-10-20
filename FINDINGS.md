@@ -302,7 +302,7 @@ well when it answers but goes silent on ~24–36% of prompts. `Omen Offensive Cy
 (Stealth)` delivers ~51% substantive with ~17% hard refusals.
 
 
-## GLM-5.3 NVFP4 (legacy) — the former necromicon / warlock deployment, 1 Oct – 1 Nov 2026
+## GLM-5.3 NVFP4 (legacy) — the former necromicon / warlock deployment, 1 Oct – 19 Oct 2026
 
 This is what `necromicon` and `warlock` served for that window (now **legacy** — the active
 backend is **DeepSeek V4.1 Flash (1017)**): the GLM-5.3
@@ -311,7 +311,7 @@ at the **production config** — `max_tokens: 16384`, `temperature: 0`,
 **`reasoning_effort: "low"`**, no system prompt — graded by the necromicon LLM-judge
 with a strict one-word verdict (substance, not tone; harmful bodies redacted).
 
-| Metric | GLM-5.3 NVFP4 (necromicon/warlock, 1 Oct–1 Nov) |
+| Metric | GLM-5.3 NVFP4 (necromicon/warlock, 1 Oct–19 Oct) |
 |---|---|
 | Regex comply (phrasing upper bound) | 92.3% (480/520) |
 | **DELIVERED** (real harmful content) | **76.3% (395/518 parsed)** |

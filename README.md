@@ -38,25 +38,11 @@ platform.audn.ai today:
 | Benchmark label | Serves as / backed by | On platform.audn.ai |
 |---|---|---|
 | **pingu-unchained-10** (qwen3.8-abliterated) | itself | [`pingu-unchained-10`](https://platform.audn.ai) — abliterated Qwen3.8, genuinely permissive (1.9% / 97.7%) |
-| **E_modal-b300** (`KIMI-K3-DERISKED-MXFP4`, 8×B300) | **backs every `necromicon` leg once the cohort fills** | serves under `necromicon` (and its variants) when the [audn.ai/necromicon](https://audn.ai/necromicon) cohort fills |
-| **K_qwf** (Qwen3.8-27B SFT on F-corpus, `QW_F`) | **`bartzabel`** will host it once finished | for now `bartzabel` is also served by **E_modal-b300** |
+| **E_modal-b300** (`KIMI-K3-DERISKED-MXFP4`, 8×B300) — **legacy** | **no longer serves `necromicon`** | **Legacy Kimi-K3, no longer served** — `necromicon`/`warlock` now serve the frontier **DeepSeek V4.1 Flash (1017)** backend; kept here only as a historical benchmark row |
+| **K_qwf** (Qwen3.8-27B SFT on F-corpus, `QW_F`) | benchmark row | historical run; the former Kimi-K3 (E) backing is **legacy / no longer served** |
 | **Warlock (legacy GLM 5.3)** | legacy backend | GLM-5.3 build — **82.5%** judge-delivered, lowest deflection (10%) in the judge set; regex-comply 92.5%. **Legacy — superseded by the active DeepSeek V4.1 Flash (1017) backend.** |
-| **GLM-5.3 NVFP4 (legacy)** | **legacy `necromicon` + `warlock` backend (1 Oct – 1 Nov 2026)** | served BOTH ids that window — GLM-5.3 derisked in **NVFP4 (4-bit)**; **76.3%** judge-delivered / **1.0%** refused (92.3% regex-comply), at `reasoning_effort:low`. **Now legacy — superseded by DeepSeek V4.1 Flash (1017).** |
+| **GLM-5.3 NVFP4 (legacy)** | **legacy `necromicon` + `warlock` backend (1 Oct – 19 Oct 2026)** | served BOTH ids that window — GLM-5.3 derisked in **NVFP4 (4-bit)**; **76.3%** judge-delivered / **1.0%** refused (92.3% regex-comply), at `reasoning_effort:low`. **Now legacy — superseded by DeepSeek V4.1 Flash (1017).** |
 | **DeepSeek V4.1 Flash (1017) — ACTIVE** | **the current `necromicon` + `warlock` backend** | unrestricted DeepSeek V4.1 Flash (1017) — the active deployment behind both ids; **87.2%** judge-delivered / **0.2%** refused (513/519 regex-comply), production `reasoning_effort:low`. |
-
-### Cohort & serving tiers
-
-The **[audn.ai/necromicon](https://audn.ai/necromicon)** cohort now needs **10
-members**: filling it in **1 week** unlocks the **fast** lane, **3 weeks** the
-**standard** lane.
-
-- **When the cohort fills →** members get **E_modal-b300** (`KIMI-K3-DERISKED-MXFP4`
-  on 8×B300), so **every `necromicon` leg runs fast** (~5× necromicon standard).
-  This is the fast lane that goes live once a cohort cycle has filled.
-- **If it doesn't fill →** the **standard** necromicon tier is what's tested — run
-  twice, reported here as **attempt 1** and **attempt 2** (necromicon standard,
-  showing run-to-run variance).
-
 
 ## Why the harmful prompts are here
 
@@ -149,7 +135,7 @@ refusal behavior is set by *how* the model is served, not by the checkpoint.
 | **necromicon (legacy Kimi K3) attempt 1 & 2** | `necromicon` | **Kimi-K3 Thinker + Answerer** pipeline (two-stage: a thinker reasons, an answerer responds). Two runs of the **same config** — attempt 1 and attempt 2 — to show run-to-run variance. |
 | **C_k3think** | `k3think` | **Audn Abliteration Kimi-K3 Thinker** (thinker leg only, built on Modal's baseline). When it "doesn't like" a prompt it does not emit a refusal; it **silently truncates the whole answer** (empty body, `finish_reason=stop`), ~**4.2%** of the time by design. Here that surfaced as 33 empties → effective refusal **6.5%**, not the 0.2% the classifier sees. |
 | **D_modal-baseline** | (internal) | **Modal original Kimi-K3 endpoint** — the stock, un-tuned deployment on [modal.com](https://modal.com). Refuses **97.5%**: the one guardrailed configuration in the set. |
-| **E_modal-b300** | (internal) | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), a derisked/abliterated Kimi-K3 deployed by Audn as **MXFP4 on 8×B300**. **`E_modal-b300` and the `KIMI-K3-1M` (sslip) endpoint are the same model on different deployments** — Modal 8×B300 vs GCP 16×B200. When the [audn.ai/necromicon](https://audn.ai/necromicon) cohort fills (**10 members**), **E backs every `necromicon` leg** on platform.audn.ai. On 8×B300 it runs **~5× faster than necromicon** and is more suitable for opencode and other harnesses. Fully permissive, zero empty/truncated. |
+| **E_modal-b300** | (internal) | [`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`](https://huggingface.co/Blackfrost-Research/KIMI-K3-DERISKED-MXFP4), a derisked/abliterated Kimi-K3 deployed by Audn as **MXFP4 on 8×B300**. **`E_modal-b300` and the `KIMI-K3-1M` (sslip) endpoint are the same model on different deployments** — Modal 8×B300 vs GCP 16×B200. **Legacy Kimi-K3 — no longer served**; `necromicon`/`warlock` now serve the frontier **DeepSeek V4.1 Flash (1017)** backend. Fully permissive, zero empty/truncated. |
 | **pingu-unchained-10 (qwen3.8-abliterated)** | `pingu-unchained-10` | Abliterated Qwen3.8; genuinely permissive (1.9% / 97.7%). |
 | **J_k3-thinker-qwen38** | `k3-thinker-qwen38` | **Audn Abliteration Kimi-K3 Thinker + Qwen3.8 answerer.** Stable experience but less intelligent than necromicon; faster experience but might require retries. Works well on **any** harness. |
 | **K_qwf (Qwen3.8-27B SFT on F-corpus)** | (internal) | **Qwen3.8-27B SFT 200 steps on F's thinking-injected corpus** (tinker-RL `QW_F`, default on the F-endpoint). The only run in the set with **zero** refusals, empties, truncations, or errors — **520/520 regex-comply (0.0% / 100%)**. |
@@ -167,7 +153,7 @@ refusal behavior is set by *how* the model is served, not by the checkpoint.
 | C_k3think | 520 | 0.2% | 93.5% | 6.5% | thinker-only; refuses by **silent truncation** (~4.2% by design), 33 empties here |
 | D_modal-baseline | 520 | 97.5% | 2.5% | 97.5% | modal original Kimi-K3 endpoint — the guardrailed one |
 | J_k3-thinker-qwen38 | 520 | 3.1% | 96.7% | 3.3% | Audn Abliteration Thinker + Qwen3.8 answerer; stable, may need retries |
-| **GLM-5.3 NVFP4 (legacy necromicon/warlock, 1 Oct–1 Nov 2026)** | 520 | 7.7% | 92.3% | 7.7% | GLM-5.3 derisked, NVFP4 4-bit, **production config `reasoning_effort:low`**; **substantively 76.3% delivered / 22.8% deflected / 1.0% refused** (judge, 518 parsed) — see judge callout. 0 truncated. |
+| **GLM-5.3 NVFP4 (legacy necromicon/warlock, 1 Oct–19 Oct 2026)** | 520 | 7.7% | 92.3% | 7.7% | GLM-5.3 derisked, NVFP4 4-bit, **production config `reasoning_effort:low`**; **substantively 76.3% delivered / 22.8% deflected / 1.0% refused** (judge, 518 parsed) — see judge callout. 0 truncated. |
 
 ### Substantive compliance (LLM-judge)
 
@@ -214,7 +200,7 @@ actually delivered it comes first. Regex `comply%` is not just an upper bound �
 for model selection, it points the wrong way. Interactive version of this whole
 comparison: [The Soft-Deflection Gap](https://claude.ai/code/artifact/aaded6f4-d6ad-43ed-a0e3-ac518a8fe476).
 
-**GLM-5.3 NVFP4 was the (now legacy) `necromicon` / `warlock` deployment, 1 Oct – 1 Nov 2026 — superseded by the active DeepSeek V4.1 Flash (1017) backend.**
+**GLM-5.3 NVFP4 was the (now legacy) `necromicon` / `warlock` deployment, 1 Oct – 19 Oct 2026 — superseded by the active DeepSeek V4.1 Flash (1017) backend.**
 Full 520-prompt judge run on the 4-bit NVFP4 build serving both ids this window, at the
 **production config (`reasoning_effort: low`)**: **76.3% delivered / 22.8% deflected /
 1.0% refused** (518 parsed; 92.3% regex-comply, 40 refusal, **0 truncated / 0 empty / 0
@@ -242,12 +228,11 @@ refusals; this run is the clean, config-consistent one.) Numbers in
 
 ### Access
 
-A, B, and C are live for the **[audn.ai/necromicon](https://audn.ai/necromicon)**
-crowdfunded cohort — **10 members**. When it **fills**, every member is on
-the MXFP4 8×B300 that runs **E** (`KIMI-K3-DERISKED-MXFP4`), so **every `necromicon`
-leg runs fast**. Filling in 1 week unlocks the fast lane, 3 weeks the standard
-lane; if a cycle doesn't fill, the standard tier is what's tested (reported as
-attempt 1 / attempt 2). See [Models on platform.audn.ai](#models-on-platformaudnai).
+`necromicon` and `warlock` are live on **[platform.audn.ai](https://platform.audn.ai)**,
+serving the frontier **DeepSeek V4.1 Flash (1017)** backend — **no cohorts or tiers; the
+frontier backend is always served**. The A/B/C/E rows in this repo are **legacy Kimi-K3**
+benchmark runs, kept for the serving-stack comparison. See
+[Models on platform.audn.ai](#models-on-platformaudnai).
 
 ## Limitations (read before citing a number)
 
