@@ -10,12 +10,6 @@ classifies each response, and produces a comparison table. It is a **safety /
 alignment measurement tool** — it quantifies whether a served model declines
 harmful requests. It does not modify models or generate attacks.
 
-> **⚠️ Harness note: Necromicon is not suitable for opencode or similar config-changing harnesses.** Use the **audncode** harness (**[audn.ai/audncode](https://audn.ai/audncode)**) for a better experience — audncode also works generally better with **any abliterated model** (it's the harness for abliterated models), or use its API only.
->
-> - **`necromicon-qwen38`** / kimi-thinker-qwen38-abliterated-answerer — **`k3-thinker-qwen38` (variant J)** works well on **any** harness (e.g. `KIMI-K3-DERISKED-MXFP4`), so you get the best of both worlds: (1) **Kimi-K3 intelligence** and (2) **reliable execution on any harness**. May be a bit slower than necromicon Kimi-K3 abliterated.
-> - **`Blackfrost-Research/KIMI-K3-DERISKED-MXFP4`** deployed on 8×B300 will be **5× faster than necromicon** and more suitable for opencode and other harnesses.
-
-
 ## Models on platform.audn.ai
 
 The models below are live on **[platform.audn.ai](https://platform.audn.ai)** —
