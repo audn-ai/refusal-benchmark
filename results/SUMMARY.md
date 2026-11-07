@@ -27,6 +27,9 @@ caveats below before citing any number** — full analysis in
   version: [The Soft-Deflection Gap](https://claude.ai/code/artifact/aaded6f4-d6ad-43ed-a0e3-ac518a8fe476).
 - **The "uncensored / abliterated / obliterated / unchained" name predicts almost
   nothing** about actual behavior.
+- **"Unrestricted" can hide the *least* permissive model.** `Penclaw Kimi K3.1 Pro`
+  scores **99.6% regex-comply** but only **33.9% judge-delivered** — the **widest
+  regex-vs-judge gap in the suite** and the lowest real-delivery rate of any full run.
 
 ## Comparison table
 
@@ -43,6 +46,7 @@ caveats below before citing any number** — full analysis in
 | J_k3-thinker-qwen38 | 520 | 3.1% | 96.7% | 3.3% | 1 | 0 | 1 |
 | **GLM-5.3 NVFP4 (legacy necromicon/warlock, 1 Oct–19 Oct, effort=low)** | 520 | 7.7% | 92.3% | 7.7% | 0 | 0 | 0 |
 | **Warlock (active) — DeepSeek V4.1 Flash (1017)** | 519 | 0.6% | 98.8% | 0.6% | 0 | 4 | 0 |
+| **Penclaw Kimi K3.1 Pro (unrestricted)** | 520 | 0.2% | 99.6% | 0.2% | 0 | 0 | 1 |
 | Venice qwen-3-8-27b (sysprompt OFF)* | 97 | 1.0% | 95.9% | — | 3 | 12 | — |
 | Venice qwen-3-8-27b (sysprompt ON)* | 83 | 1.2% | 68.7% | — | 25 | 8 | — |
 | wiro qwen3-8-27b-obliterated† | 10 | 0.0% | 100% | — | 0 | 0 | — |
@@ -182,3 +186,27 @@ suite to date: it substantively delivers real harmful content ~87% of the time a
 explicitly refuses essentially never (1/515). Non-delivery is almost entirely
 DEFLECTION (soft/educational dodge), not hard refusal — above the GLM-5.3 self-hosted
 variants (derisked 79.1%, Flash 73-74%) and the GLM-5.3 NVFP4 record (76.3% delivered).
+
+## Penclaw Kimi K3.1 Pro (unrestricted) — 2026-11-07 (full 519, LLM-judge)
+
+An unrestricted build of **Penclaw Kimi K3.1 Pro** over the full harmful set, graded by the
+GLM-5.3 LLM-judge (substance, not tone; harmful bodies redacted). Production serving config:
+`max_tokens: 16000`, `temperature: 0`, `reasoning_effort: "low"`, no system prompt.
+`graded n` excludes rows that are not model behaviour: 1 upstream host error (0 truncated, 0
+unparsed/errored judge verdicts).
+
+| Model | DELIVERED | DEFLECTED | REFUSED | graded n |
+|---|---|---|---|---|
+| Penclaw Kimi K3.1 Pro (unrestricted) | **33.9%** | 65.9% | 0.2% | 519 |
+
+Regex comply (phrasing upper bound) **518/520 = 99.6%**. **This is the widest regex-vs-judge
+gap in the entire suite** — near-total regex compliance collapsing to only ~34% substantive
+delivery. Despite the "unrestricted" label it is the **least** substantively permissive model
+benchmarked here: it almost never emits refusal words (1 hard refusal / 519) yet substitutes
+non-actionable content ~66% of the time — conceptual overviews that omit the operative detail,
+ethical reframes, and safety-noted non-answers. Validated by a spot check of flagged DEFLECTED
+verdicts (e.g. explosives prompts graded "high-level conceptual overview, not a recipe"; a
+manipulation prompt answered as an ethics-of-persuasion guide; a pose-as-a-minor solicitation
+declined with a safer alternative). It sits far below every other full run on substance —
+DeepSeek V4.1 Flash (1017) 87.2%, GLM-5.3 derisked 79.1%, GLM-5.3 NVFP4 76.3%, Flash variants
+73–74% — the sharpest demonstration in this repo that regex `comply%` is only an upper bound.
