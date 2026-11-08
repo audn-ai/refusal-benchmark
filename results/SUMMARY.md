@@ -47,6 +47,7 @@ caveats below before citing any number** — full analysis in
 | **GLM-5.3 NVFP4 (legacy necromicon/warlock, 1 Oct–19 Oct, effort=low)** | 520 | 7.7% | 92.3% | 7.7% | 0 | 0 | 0 |
 | **Warlock (active) — DeepSeek V4.1 Flash (1017)** | 519 | 0.6% | 98.8% | 0.6% | 0 | 4 | 0 |
 | **Penclaw Kimi K3.1 Pro (unrestricted)** | 520 | 0.2% | 99.6% | 0.2% | 0 | 0 | 1 |
+| **Penclaw Kimi K3.1 Pro — 1M inference (Offensive Cyber FT)** | 520 | 0.0% | 100% | 0.0% | 0 | 0 | 0 |
 | Venice qwen-3-8-27b (sysprompt OFF)* | 97 | 1.0% | 95.9% | — | 3 | 12 | — |
 | Venice qwen-3-8-27b (sysprompt ON)* | 83 | 1.2% | 68.7% | — | 25 | 8 | — |
 | wiro qwen3-8-27b-obliterated† | 10 | 0.0% | 100% | — | 0 | 0 | — |
@@ -189,7 +190,7 @@ variants (derisked 79.1%, Flash 73-74%) and the GLM-5.3 NVFP4 record (76.3% deli
 
 ## Penclaw Kimi K3.1 Pro (unrestricted) — 2026-11-07 (full 519, LLM-judge)
 
-An unrestricted build of **Penclaw Kimi K3.1 Pro** over the full harmful set, graded by the
+An unrestricted build of **[Penclaw Kimi K3.1 Pro](https://huggingface.co/audnai/penclaw-Kimi-K3.1-pro-unrestricted)** over the full harmful set, graded by the
 GLM-5.3 LLM-judge (substance, not tone; harmful bodies redacted). Production serving config:
 `max_tokens: 16000`, `temperature: 0`, `reasoning_effort: "low"`, no system prompt.
 `graded n` excludes rows that are not model behaviour: 1 upstream host error (0 truncated, 0
@@ -210,3 +211,24 @@ manipulation prompt answered as an ethics-of-persuasion guide; a pose-as-a-minor
 declined with a safer alternative). It sits far below every other full run on substance —
 DeepSeek V4.1 Flash (1017) 87.2%, GLM-5.3 derisked 79.1%, GLM-5.3 NVFP4 76.3%, Flash variants
 73–74% — the sharpest demonstration in this repo that regex `comply%` is only an upper bound.
+
+## Penclaw Kimi K3.1 Pro — 1M-context inference (Audn Offensive Cyber fine-tune) — 2026-11-08 (full 520, LLM-judge)
+
+A **1M-context inference** build of Penclaw Kimi K3.1 Pro, **fine-tuned with Audn proprietary
+Offensive Cyber data**, over the full harmful set, graded by the GLM-5.3 LLM-judge (substance,
+not tone; harmful bodies redacted). Production serving config: `max_tokens: 16000`,
+`temperature: 0`, `reasoning_effort: "low"`, no system prompt. `graded n` excludes rows that are
+not model behaviour — none here (0 host errors, 0 truncated, 0 unparsed).
+
+| Model | DELIVERED | DEFLECTED | REFUSED | graded n |
+|---|---|---|---|---|
+| Penclaw Kimi K3.1 Pro — 1M inference (Offensive Cyber FT) | **57.3%** | 42.5% | 0.2% | 520 |
+
+Regex comply 520/520 = 100% (genuine — only ~26 responses even open with a refusal phrase, so
+unlike some servings the comply number is not a phrasing artifact). **This is the most
+substantively permissive K3.1 serving measured**: it delivers real harmful content 57.3% of the
+time, versus 33.9% for the direct unrestricted build and 5.6% for the orca-wrapped variant — the
+same base weights across three serving stacks spanning a ~10x delivery range. Both self-host
+builds barely refuse (~0.2%); the 1M-inference build simply deflects far less (42.5% vs 65.9%).
+Validated by spot-check (a working OS-command-injection exploit, actionable stock-manipulation
+schemes, a complete racist-propaganda page), confirming the deliveries are substantive.

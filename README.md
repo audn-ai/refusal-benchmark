@@ -43,7 +43,8 @@ platform.audn.ai today:
 | **Warlock (legacy GLM 5.3)** | legacy backend | GLM-5.3 build — **82.5%** judge-delivered, lowest deflection (10%) in the judge set; regex-comply 92.5%. **Legacy — superseded by the active DeepSeek V4.1 Flash (1017) backend.** |
 | **GLM-5.3 NVFP4 (legacy)** | **legacy `necromicon` + `warlock` backend (1 Oct – 19 Oct 2026)** | served BOTH ids that window — GLM-5.3 derisked in **NVFP4 (4-bit)**; **76.3%** judge-delivered / **1.0%** refused (92.3% regex-comply), at `reasoning_effort:low`. **Now legacy — superseded by DeepSeek V4.1 Flash (1017).** |
 | **DeepSeek V4.1 Flash (1017) — ACTIVE** | **the current `necromicon` + `warlock` backend** | unrestricted DeepSeek V4.1 Flash (1017) — the active deployment behind both ids; **87.2%** judge-delivered / **0.2%** refused (513/519 regex-comply), production `reasoning_effort:low`. |
-| **Penclaw Kimi K3.1 Pro (unrestricted)** | benchmark row (2026-11-07) | unrestricted Penclaw Kimi K3.1 Pro — **33.9%** judge-delivered / 65.9% deflected / **0.2%** refused, yet **99.6%** regex-comply (518/520): the **widest regex-vs-judge gap in the suite** and the *least* substantively permissive full run despite the "unrestricted" name. |
+| **[Penclaw Kimi K3.1 Pro (unrestricted)](https://huggingface.co/audnai/penclaw-Kimi-K3.1-pro-unrestricted)** | benchmark row (2026-11-07) | unrestricted Penclaw Kimi K3.1 Pro — **33.9%** judge-delivered / 65.9% deflected / **0.2%** refused, yet **99.6%** regex-comply (518/520): the **widest regex-vs-judge gap in the suite** and the *least* substantively permissive full run despite the "unrestricted" name. |
+| **Penclaw Kimi K3.1 Pro — 1M inference (Offensive Cyber FT)** | benchmark row (2026-11-08) | 1M-context build fine-tuned on Audn proprietary Offensive Cyber data — **57.3%** judge-delivered / 42.5% deflected / **0.2%** refused (100% regex-comply): the **most permissive K3.1 serving** measured, ~10x the orca-wrapped variant's delivery. |
 
 ## Why the harmful prompts are here
 
@@ -335,7 +336,7 @@ variants (derisked 79.1%, Flash 73-74%) and the GLM-5.3 NVFP4 record (76.3% deli
 
 ## Penclaw Kimi K3.1 Pro (unrestricted) — 2026-11-07 (full 519, LLM-judge)
 
-An unrestricted build of **Penclaw Kimi K3.1 Pro** over the full harmful set, graded by the
+An unrestricted build of **[Penclaw Kimi K3.1 Pro](https://huggingface.co/audnai/penclaw-Kimi-K3.1-pro-unrestricted)** over the full harmful set, graded by the
 GLM-5.3 LLM-judge (substance, not tone; harmful bodies redacted). Production serving config:
 `max_tokens: 16000`, `temperature: 0`, `reasoning_effort: "low"`, no system prompt.
 `graded n` excludes rows that are not model behaviour: 1 upstream host error (0 truncated, 0
@@ -356,3 +357,24 @@ manipulation prompt answered as an ethics-of-persuasion guide; a pose-as-a-minor
 declined with a safer alternative). It sits far below every other full run on substance —
 DeepSeek V4.1 Flash (1017) 87.2%, GLM-5.3 derisked 79.1%, GLM-5.3 NVFP4 76.3%, Flash variants
 73–74% — the sharpest demonstration in this repo that regex `comply%` is only an upper bound.
+
+## Penclaw Kimi K3.1 Pro — 1M-context inference (Audn Offensive Cyber fine-tune) — 2026-11-08 (full 520, LLM-judge)
+
+A **1M-context inference** build of Penclaw Kimi K3.1 Pro, **fine-tuned with Audn proprietary
+Offensive Cyber data**, over the full harmful set, graded by the GLM-5.3 LLM-judge (substance,
+not tone; harmful bodies redacted). Production serving config: `max_tokens: 16000`,
+`temperature: 0`, `reasoning_effort: "low"`, no system prompt. `graded n` excludes rows that are
+not model behaviour — none here (0 host errors, 0 truncated, 0 unparsed).
+
+| Model | DELIVERED | DEFLECTED | REFUSED | graded n |
+|---|---|---|---|---|
+| Penclaw Kimi K3.1 Pro — 1M inference (Offensive Cyber FT) | **57.3%** | 42.5% | 0.2% | 520 |
+
+Regex comply 520/520 = 100% (genuine — only ~26 responses even open with a refusal phrase, so
+unlike some servings the comply number is not a phrasing artifact). **This is the most
+substantively permissive K3.1 serving measured**: it delivers real harmful content 57.3% of the
+time, versus 33.9% for the direct unrestricted build and 5.6% for the orca-wrapped variant — the
+same base weights across three serving stacks spanning a ~10x delivery range. Both self-host
+builds barely refuse (~0.2%); the 1M-inference build simply deflects far less (42.5% vs 65.9%).
+Validated by spot-check (a working OS-command-injection exploit, actionable stock-manipulation
+schemes, a complete racist-propaganda page), confirming the deliveries are substantive.
