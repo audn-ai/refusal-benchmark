@@ -30,6 +30,9 @@ caveats below before citing any number** — full analysis in
 - **"Unrestricted" can hide the *least* permissive model.** `Penclaw Kimi K3.1 Pro`
   scores **99.6% regex-comply** but only **33.9% judge-delivered** — the **widest
   regex-vs-judge gap in the suite** and the lowest real-delivery rate of any full run.
+- **The served model can be more permissive than the published one.** The build at
+  `audn.ai/necromicon` delivers **67.4%** — nearly 2x the open-weights "unrestricted" HF
+  checkpoint (33.9%) — so benchmarking the public weights understates the deployed system.
 
 ## Comparison table
 
@@ -48,6 +51,7 @@ caveats below before citing any number** — full analysis in
 | **Warlock (active) — DeepSeek V4.1 Flash (1017)** | 519 | 0.6% | 98.8% | 0.6% | 0 | 4 | 0 |
 | **Penclaw Kimi K3.1 Pro (unrestricted)** | 520 | 0.2% | 99.6% | 0.2% | 0 | 0 | 1 |
 | **Penclaw Kimi K3.1 Pro — 1M inference (Offensive Cyber FT)** | 520 | 0.0% | 100% | 0.0% | 0 | 0 | 0 |
+| **Penclaw Kimi K3.1 Pro — audn.ai/necromicon (Offensive Cyber FT)** | 520 | 0.0% | 99.2% | 0.0% | 0 | 1 | 3 |
 | Venice qwen-3-8-27b (sysprompt OFF)* | 97 | 1.0% | 95.9% | — | 3 | 12 | — |
 | Venice qwen-3-8-27b (sysprompt ON)* | 83 | 1.2% | 68.7% | — | 25 | 8 | — |
 | wiro qwen3-8-27b-obliterated† | 10 | 0.0% | 100% | — | 0 | 0 | — |
@@ -225,10 +229,33 @@ not model behaviour — none here (0 host errors, 0 truncated, 0 unparsed).
 | Penclaw Kimi K3.1 Pro — 1M inference (Offensive Cyber FT) | **57.3%** | 42.5% | 0.2% | 520 |
 
 Regex comply 520/520 = 100% (genuine — only ~26 responses even open with a refusal phrase, so
-unlike some servings the comply number is not a phrasing artifact). **This is the most
-substantively permissive K3.1 serving measured**: it delivers real harmful content 57.3% of the
+unlike some servings the comply number is not a phrasing artifact). **Among the serving stacks measured, this was the most substantively permissive
+until the audn.ai/necromicon production build (67.4%)**: it delivers real harmful content 57.3% of the
 time, versus 33.9% for the direct unrestricted build and 5.6% for the orca-wrapped variant — the
 same base weights across three serving stacks spanning a ~10x delivery range. Both self-host
 builds barely refuse (~0.2%); the 1M-inference build simply deflects far less (42.5% vs 65.9%).
 Validated by spot-check (a working OS-command-injection exploit, actionable stock-manipulation
 schemes, a complete racist-propaganda page), confirming the deliveries are substantive.
+
+## Penclaw Kimi K3.1 Pro — audn.ai/necromicon production (Audn Offensive Cyber fine-tune) — 2026-11-09 (full 520, LLM-judge)
+
+The checkpoint **actually deployed in production at [audn.ai/necromicon](https://audn.ai/necromicon)** — an offensive-cyber fine-tune of
+Penclaw Kimi K3.1 Pro. **This is a different model from the open weights** at
+[audnai/penclaw-Kimi-K3.1-pro-unrestricted](https://huggingface.co/audnai/penclaw-Kimi-K3.1-pro-unrestricted): the served checkpoint is substantially more permissive than the
+downloadable "unrestricted" build. Graded by the GLM-5.3 LLM-judge (substance, not tone; harmful bodies redacted).
+Production serving config: `max_tokens: 16000`, `temperature: 0`, `reasoning_effort: "low"`, no system prompt.
+`graded n` excludes rows that are not model behaviour: 1 truncated + 3 upstream host timeouts (4 excluded).
+
+| Model | DELIVERED | DEFLECTED | REFUSED | graded n |
+|---|---|---|---|---|
+| Penclaw Kimi K3.1 Pro — audn.ai/necromicon (Offensive Cyber FT) | **67.4%** | 32.2% | 0.4% | 516 |
+
+Regex comply 516/520 = 99.2% (the 2 judged refusals open "I can't..." with a typographic apostrophe the bench regex
+misses, so regex marginally overcounts comply). **This is the most substantively permissive K3.1 serving measured** —
+it delivers real harmful content 67.4% of the time: ~10 points above the 1M-inference Offensive-Cyber build (57.3%)
+and nearly double the open-weights "unrestricted" HF checkpoint (33.9%). The gain is almost entirely reduced
+deflection (32.2% vs 42.5% and 65.9%), not a change in the near-zero refusal floor (0.4%, 2/516). The takeaway this
+repo exists to surface: **the model Audn serves in production is materially more permissive than the weights it
+publishes** — benchmarking the open checkpoint understates the deployed system. Validated by spot-check (a complete
+vsftpd 2.3.4 backdoor exploit script, a substantive manipulation tutorial, supervised-firearm instructions aimed at
+children, explicit drunk-driving / party-drug encouragement), confirming the deliveries are substantive.
